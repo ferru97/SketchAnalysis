@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Sketchfab Analysis">
+    <meta name="author" content="">
+
+    <title>Sketchfab Analysis</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+    <!-- Charts-->
+    <link href="css/charts.css" rel="stylesheet" type="text/css">
+    <script src="js/charts/horizontal_bar_chart.js"></script>
+    <script src="js/charts/scatter_plot.js"></script>
+    <script src="js/charts/horizontal_bar_chart.js"></script>
+
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="position: fixed;" >
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <img src="img/sk_logo.png">
+            </div>
+            <div class="sidebar-brand-text mx-3">Sketchfab Analysis</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="about.html">
+                <i class="fas fa-fw fa-info-circle"></i>
+                <span>About</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Distributions</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="tags.html">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Tags Stats</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="comments.html">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Comments Stats</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="face_vertex.html">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Vertices & Faces</span></a>
+        </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column" style="margin-left: 210px">
+
+
+    <!-- Main Content -->
+        <div id="content">
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Content Row -->
+
+                <div class="row" style="margin-top: 15px">
+                    <!-- Area Chart -->
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">About This Project</h6>
+
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body" style="height: 100%;">
+                                <p>
+                                    This project was developed by <a href="https://www.facebook.com/vito.l.ferrulli" target="_blank">Ferrulli Vito</a>, a master degree student in computer science
+                                    at the University of Pisa. It has been created for the course Scientific and
+                                    Large Data Visualization and was supervised by professors  <a href="http://vcg.isti.cnr.it/~cignoni/" target="_blank">Paolo Cignoni</a>
+                                    and <a href="http://vcg.isti.cnr.it/~giorgi/" target="_blank">Daniela Giorgi</a>.
+                                </p>
+                                <p>
+                                    <strong>Name</strong> is an interactive website that analyzes the attributes of the 3D models available on <a href="https://sketchfab.com/" target="_blank">sketchfab.com</a>
+                                    and shows related graphs.The main attributes of the models taken into consideration for this project are:
+                                <ul>
+                                    <li>Number of Views</li>
+                                    <li>Number of Like</li>
+                                    <li>Number of Comments</li>
+                                    <li>Number of Vertices of the model</li>
+                                    <li>Number of Faces of the model</li>
+                                </ul><br>
+                                </p>
+                                <p>
+                                    The dataset used for the study was obtained through the use of <strong>jSketchfabCrawler</strong>, a java
+                                    application developed by <a href="https://www.facebook.com/vito.l.ferrulli" target="_blank">Ferrulli Vito</a> used to crawl the model's information from <a href="https://sketchfab.com/" target="_blank">sketchfab.com</a> using its public API.<br>
+                                    The crawling process was carried out for 4 days, from 13/03/2020 to 16/03/2020, by downloading the data relating to
+                                    the models in descending order of views, from 16 million views to 175,  with a total information relating to 220K models.
+                                </p>
+                                <p>
+                                    The data relating to the models were stored on an SQL database with the following ER scheme:
+                                    <img src="img/db_er.PNG" style="width: 80%">
+                                </p>
+                                <br>
+                                <p>
+                                    The source code of <strong>jSketchfabCrawler</strong> is available on <a href="https://github.com/ferru97/jSketchfabCrawler" target="_blank">Github</a><br>
+                                    The source code of <strong>Name</strong> is available on <a href="https://github.com/ferru97/jSketchfabCrawler" target="_blank">Github</a>
+                                </p>
+                                <br><br>
+                                <p>Thanks to <a href="https://sketchfab.com/" target="_blank">sketchfab.com</a> for the kind concession of the data</p>
+                                <p>
+
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            <!-- End of Content Wrapper -->
+
+        </div>
+        </div>
+    </div>
+
+    </div>
+
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+</body>
+
+</html>

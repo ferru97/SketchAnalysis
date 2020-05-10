@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Sketchfab Analysis">
+  <meta name="author" content="">
+
+  <title>Sketchfab Analysis</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+
+  <!-- Charts-->
+  <link href="css/charts.css" rel="stylesheet" type="text/css">
+  <script src="js/charts/horizontal_bar_chart.js"></script>
+  <script src="js/charts/scatter_plot.js"></script>
+  <script src="js/charts/tags_scatter_plot.js"></script>
+  <script src="js/rainbowvis.js"></script>
+  <script src="js/charts/graph.js"></script>
+
+  <style>
+
+    .link {
+      stroke: #aaa;
+    }
+
+    .node text {
+      stroke:#333;
+      cursos:pointer;
+    }
+
+    .node circle{
+      stroke:#fff;
+      stroke-width:3px;
+      fill:#555;
+    }
+
+  </style>
+
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="position: fixed;" >
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <img src="img/sk_logo.png">
+        </div>
+        <div class="sidebar-brand-text mx-3">Sketchfab Analysis</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="about.html">
+          <i class="fas fa-fw fa-info-circle"></i>
+          <span>About</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="index.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Distributions</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="tags.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Tags Stats</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="comments.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Comments Stats</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="face_vertex.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Vertices & Faces</span></a>
+      </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column" style="margin-left: 210px">
+
+
+    <!-- Main Content -->
+      <div id="content">
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Content Row -->
+
+          <div class="row" style="margin-top: 15px">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Top 100 Tags Per Category <img src="img/loading.gif" id="loading_1" ></h6>
+                </div>
+                <!-- Card Body -->
+                  <div class="card-body" style="height: 100%;">
+                      <p>Bar-chart that shows the top 100 most frequently used tags for each category</p>
+                    <div>
+                      Category <select id="sel_cat_tags">
+                      <option value="0">All</option>
+                      <option value="1">Animals & Pets</option>
+                      <option value="2">Architecture</option>
+                      <option value="3">Art & Abstract</option>
+                      <option value="4">Cars & vehicles</option>
+                      <option value="5">Characters & Creatures</option>
+                      <option value="6">Cultural Heritage & History</option>
+                      <option value="7">Electronics & Gadgets</option>
+                      <option value="8">Fashion & Style</option>
+                      <option value="9">Food & Drink</option>
+                      <option value="10">Furniture & Home</option>
+                      <option value="11">Music</option>
+                      <option value="12">Nature & Plants</option>
+                      <option value="13">News & Politics</option>
+                      <option value="14">People</option>
+                      <option value="15">Places & Travel</option>
+                      <option value="16">Science & Technology</option>
+                      <option value="17">Sports & Fitness</option>
+                      <option value="18">Weapons & Military</option>
+                    </select>
+                    </div>
+                    <svg id="svg_1" style="width: 100%;" /><br>
+                    <div id="btns" style="display: none;margin-top: 20px"><center>
+                      <button  class="btn2 round" style="font-size: 30px;font-weight: bold;width: 50px;height: 50px;margin-right: 15px" onclick="update_tag_rows(0)"><</button>
+                      <button class="btn2 round" style="font-size: 30px;width: 50px;font-weight: bold;height: 50px;margin-left: 15px" onclick="update_tag_rows(1)">></button>
+                    </center>
+                    </div>
+                    <p style="display: none" id="selectedTag"></p>
+                    <svg id="svg_3" style="width: 100%;" />
+                  </div>
+
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow ">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Top 100 Tags Popularity</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body" style="height: 100%; ">
+                    Category <select id="sel_cat_tags2">
+                    <option value="0">All</option>
+                    <option value="animals-pets">Animals & Pets</option>
+                    <option value="architecture">Architecture</option>
+                    <option value="art-abstract">Art & Abstract</option>
+                    <option value="cars-vehicles">Cars & vehicles</option>
+                    <option value="characters-creatures">Characters & Creatures</option>
+                    <option value="cultural-heritage-history">Cultural Heritage & History</option>
+                    <option value="electronics-gadgets">Electronics & Gadgets</option>
+                    <option value="fashion-style">Fashion & Style</option>
+                    <option value="food-drink">Food & Drink</option>
+                    <option value="furniture-home">Furniture & Home</option>
+                    <option value="music">Music</option>
+                    <option value="nature-plants">Nature & Plants</option>
+                    <option value="news-politics">News & Politics</option>
+                    <option value="people">People</option>
+                    <option value="places-travel">Places & Travel</option>
+                    <option value="science-technology">Science & Technology</option>
+                    <option value="sports-fitness">Sports & Fitness</option>
+                    <option value="weapons-military">Weapons & Military</option>
+                </select>
+                  <div style="display: none" id="showSVG2">
+                    <div style="display: inline;margin-top: 5px; font-weight: bold">Choose what to plot:</div>
+                    <input type="radio" name="plCH" value="0" style="margin-left: 10px" checked>#Tags occurrences/#Likes
+                    <input type="radio" name="plCH" value="1" style="margin-left: 10px">#Tags occurrences/#Views
+                    <input type="radio" name="plCH" value="2" style="margin-left: 10px">#Views/#Likes
+                    <br>
+                    <!--<div style="display: inline;margin-top: 5px; font-weight: bold">Choose the scale:</div>
+                    <input type="radio" name="Scale" value="0" style="margin-left: 10px" checked>Linear
+                    <input type="radio" name="Scale" value="1" style="margin-left: 10px">Logarithm -->
+                    <svg id="svg_2" style="width: 100%; height: 120%;" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <br>
+          <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow ">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Tag Correlation
+
+
+                    <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
+                          Given a tag, this interactive star-graph that shows the top 100 tags which are most frequently used in conjunction with the input tag.<br><br>
+                          Each dot in the graph is a tag where the central one is the input tag.<br>
+                          The closer the dots are to the central point, the more frequently the tags indicated by the dots are used together with the input tag
+                              </span><i class="fas fa-info-circle"></i></i></div>
+                  </h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body" style="height: 100%; ">
+                  Given a tag, this interactive star-graph that shows the top 100 tags which are most frequently used in conjunction with the input tag.<br>
+                  Input a tag <input type="text" value="animal" id="tagCoo"> <button onclick="upTagCoo()">Search</button>
+                  <svg id="svg_4" style="width: 100%; height: 100%;" />
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+
+        <!-- /.container-fluid -->
+
+      </div>
+
+
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Developed By Vito Ferrulli</span>
+            </div>
+          </div>
+        </footer>
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+
+  </div>
+
+  <script>
+      var limit = 100;
+      var index_words = 0;
+      var index_cat = 0;
+      var n_showed = 20;
+      var tags_occurrency = [];
+      var tags_margin = {top: 20, right: 20, bottom: 30, left: 110},
+          tags_margin_width = 1500 - tags_margin.left - tags_margin.right,
+          tags_margin_height = 600 - tags_margin.top - tags_margin.bottom;
+
+      var graph_data = []
+
+      $( document ).ready(function() {
+        getTags();
+        getScatterData('0');
+        getCorrGraphData("animal");
+
+      });
+
+
+      function upTagCoo(){if($("#tagCoo").val()!="") getCorrGraphData($("#tagCoo").val())}
+      function getCorrGraphData(tag){
+          $("#svg_4").empty()
+          $.ajax({
+              url: "php/get_tags_cooccurrences.php?tag="+tag,
+              type: 'GET',
+              dataType: "json",
+              success: function(data) {
+                  graph_data = []
+
+                 graph_data["nodes"] = []
+                 graph_data["links"] = []
+                 graph_data["nodes"].push({"id":1,"name":tag, "strength":1,"occur":""})
+
+                  var max_stren = 0;
+                for (var key in data) {
+                    if(parseInt(data[key] )> max_stren)
+                        max_stren = parseInt(data[key])
+                }
+
+                var i = 2;
+                for (var key in data) {
+                    var strength = 110 - (100/max_stren)*parseInt(data[key])
+                    graph_data["nodes"].push({"id":i,"name": key.toString(), "occur":data[key]})
+                    graph_data["links"].push({"source":i,"target": 1, "strength":parseInt(strength)})
+                    i++;
+                }
+                console.log(graph_data)
+
+                plot_graph("svg_4",graph_data);
+              },
+              error: function(error) {
+                  console.log("Error:"+error);
+              },
+          });
+      }
+
+
+
+      function getTagForEachcat(tag){
+          tag = tag.split(" ")[0]
+          $("#loading_1").show()
+          $.ajax({
+              url: "php/get_tag_freq_categories.php?",
+              type: 'GET',
+              data:{ tag:tag },
+              dataType: "json",
+              success: function(data) {
+                  console.log(data)
+                  var res = [];
+                  for(var i=0; i<data.length; i++){
+                      var obj = {
+                          x: data[i][1],
+                          y: data[i][0]
+                      }
+                      res.push(obj)
+                  }
+                  res.sort(function(a,b) {
+                          return a.x - b.x
+                  });
+
+                  $("#selectedTag").show();
+                  $("#selectedTag").text("Occurrences of the rag '"+tag+"' in every category")
+                  $("#svg_3").empty();
+                  horizontal_bar_chart("svg_3",res);
+                  $("#loading_1").hide()
+
+              },
+              error: function(error) {
+                  console.log("Error:"+error);
+                  $("#loading_1").hide()
+              },
+          });
+      }
+
+
+
+      $( "#sel_cat_tags" ).change(function() {
+          if(tags_occurrency.length>0){
+              var cat = parseInt($("#sel_cat_tags").val());
+              index_words = 0;
+              update_tag_occurrency(cat);
+          }
+
+      });
+      function getTags() {
+          $.ajax({
+              url: "php/get_top_tag_frequency.php?limit="+limit,
+              type: 'GET',
+              dataType: "json",
+              success: function(data) {
+                  tags_occurrency = data;
+                  update_tag_occurrency(0);
+                  $("#loading_1").hide();
+                  $("#btns").show();
+
+              },
+              error: function(error) {
+                  console.log("Error:"+error);
+                  $("#loading_1").hide();
+              },
+          });
+      }
+
+
+      var lastCat = null;
+      var maxX = null;
+      function update_tag_occurrency(cat) {
+          index_cat = cat;
+          var res = [];
+          var data = tags_occurrency[cat][1].slice(index_words, index_words+n_showed);
+          var start_order = index_words+1;
+          for(var i=0; i<data.length; i++){
+              var obj = {
+                  y: data[i][0]+" "+(start_order+i)+"°",
+                  x: data[i][1]
+              }
+              res.push(obj)
+          }
+
+          res = res.sort(function (a,b) {
+              return a.x - b.x
+          })
+          $("#svg_1").empty();
+
+          if(lastCat!=cat || maxX==null){
+              lastCat = index_cat
+              maxX = 0;
+              for(var i=0; i<data.length; i++){
+                  if(parseInt(data[i][1])>maxX)
+                      maxX = parseInt(data[i][1]);
+              }
+          }
+
+          tagBarchart = true;
+          horizontal_bar_chart("svg_1",res,0,maxX);
+      }
+
+      function update_tag_rows(op){
+          if(op==1 && index_words+n_showed<tags_occurrency[index_cat][1].length){
+              index_words = index_words + n_showed;
+              update_tag_occurrency(index_cat);
+          }
+
+          if(op==1 && tags_occurrency[index_cat][1].length-n_showed<index_words){
+              index_words = index_words + n_showed;
+              update_tag_occurrency(index_cat);
+          }
+
+          if(op==0 && index_words-n_showed>=0){
+              index_words = index_words - n_showed;
+              update_tag_occurrency(index_cat);
+          }
+      }
+
+
+
+      var scatterData = null
+      $('input[type=radio][name=plCH]').change(function() {plotScatter();});
+      $('input[type=radio][name=Scale]').change(function() {plotScatter();});
+      function plotScatter(){
+         //[0]tag - [1]num -[2]like_num -[3]view_num -[4]comm_num
+        $("#svg_2").empty();
+
+          var type = $("input[name='plCH']:checked").val()
+          var scale = $("input[name='Scale']:checked").val()
+
+          var max_occurrences = 0;
+
+          var x = 1;
+          var y = 2;
+          var xLabel = "#Tag Occurrences"
+          var yLabel = "#Likes"
+          if(type=="1"){
+              y = 3;
+              yLabel = "#Views";
+          }else if(type=="2"){
+              x = 3;
+              y = 4;
+              xLabel = "#Views";
+              yLabel = "#Comments";
+
+              for(var j=0;j<scatterData.length; j++){
+                  if(parseInt(scatterData[j][1])>max_occurrences)
+                      max_occurrences = parseInt(scatterData[j][1]);
+              }
+          }
+
+          var data = [];
+          for(var i=0; i<scatterData.length; i++){
+              data[i] = new Array(3)
+              data[i][0] = scatterData[i][x];
+              data[i][1] =  type!="2" ? scatterData[i][y]/data[i][0] : scatterData[i][y];
+              data[i][2] = type!="2" ? scatterData[i][0] : scatterData[i][0]+" #"+scatterData[i][1];
+              data[i][3] = type!="2" ? null: colorGradient(scatterData[i][1],max_occurrences);
+          }
+
+          tagsScatterPlot("svg_2",data,xLabel,yLabel);
+
+      }
+
+
+
+
+      $( "#sel_cat_tags2" ).change(function() {getScatterData($("#sel_cat_tags2").val());});
+      function getScatterData(cat){
+          $("#svg_2").empty();
+          $.ajax({
+              url: "php/get_top_tags_likes&views.php?cat="+cat,
+              type: 'GET',
+              dataType: "json",
+              success: function(data) {
+                  scatterData = data;
+                  $("#showSVG2").show();
+                  plotScatter();
+              },
+              error: function(error) {
+                  console.log("Error:"+error);
+              },
+          });
+      }
+
+
+      function colorGradient(val,max){
+          var rainbow = new Rainbow();
+          rainbow.setNumberRange(1, max);
+          rainbow.setSpectrum('red', 'black');
+          return '#'+rainbow.colourAt(val);
+      }
+
+
+  </script>
+
+
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
+</body>
+
+</html>

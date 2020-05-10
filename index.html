@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Sketchfab Analysis">
+  <meta name="author" content="">
+
+  <title>Sketchfab Analysis</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+
+   <link rel="stylesheet" href="css/w3_modal.css">
+
+
+    <!-- Charts-->
+  <link href="css/charts.css" rel="stylesheet" type="text/css">
+  <script src="js/charts/horizontal_bar_chart.js"></script>
+  <script src="js/charts/multi_scatter_plot.js"></script>
+  <script src="js/charts/scatter_plot.js"></script>
+  <script src="js/charts/hor_stacked_bar_chart.js"></script>
+
+  <link rel="stylesheet" href="css/styles.css">
+
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="position: fixed;" >
+
+      <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <img src="img/sk_logo.png">
+            </div>
+            <div class="sidebar-brand-text mx-3">Sketchfab Analysis</div>
+        </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="about.html">
+          <i class="fas fa-fw fa-info-circle"></i>
+          <span>About</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="index.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Distributions</span></a>
+      </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="tags.html">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Tags Stats</span></a>
+        </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="comments.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Comments Stats</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="face_vertex.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Vertices & Faces</span></a>
+      </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column" style="margin-left: 210px">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+            <div class="w3-container">
+                <div id="id01" class="w3-modal" style="padding-left: 110px" >
+                    <div class="w3-modal-content w3-card-4">
+                        <header class="w3-container w3-teal">
+        <span onclick="document.getElementById('id01').style.display='none'"
+              class="w3-button w3-display-topright">&times;</span>
+                            <h2 id="modal_t"></h2>
+                        </header>
+                        <div class="w3-container" style="margin-top: 10px;margin-bottom: 10px;margin-left: 50px">
+                            <table>
+                              <tr><td>#Views</td><td id="modal_v"></td></tr>
+                              <tr><td>#Likes</td><td id="modal_l"></td></tr>
+                              <tr><td>#Comments </td><td id="modal_c"></td></tr>
+                              <tr><td>Date</td><td id="modal_d"></td></tr>
+                            </table>
+                          <br>
+                          <a href="" id="modal_btn" class="btn_modal" target="_blank">View Model</a>
+                        </div>
+                        <footer class="w3-container w3-teal">
+                        </footer>
+                    </div>
+                </div>
+            </div>
+
+          <!-- Content Row -->
+          <div class="row" style="margin-top: 15px">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Summary Info
+                      <div class='tooltip_good' style="display: inline;"> <span class='top' style="margin-top: 150px; width: 300px">
+                          Summary info for each category about the number of models, views, likes and comment
+                      </span><i class="fas fa-info-circle"></i></i></div></h6>
+                </div>
+                <!-- Card Body -->
+                <div>
+                  <p style="margin-left: 30px;margin-top: 20px">*Note: a model can be tagged with more than one category</p>
+
+                  <table class="table1" style="margin-left: 30px;margin-top: 20px;margin-bottom: 20px;color: #0b0e07">
+                    <tr>
+                      <th>Category</th>
+                      <th>#Models</th>
+                      <th>#Views</th>
+                      <th>#Likes</th>
+                      <th>#Comments</th>
+                    </tr>
+                    <tr>
+                      <td>Animals & Pets</td>
+                      <td id="m_c_0" class="al-right"></td>
+                      <td id="v_c_0" class="al-right"></td>
+                      <td id="l_c_0" class="al-right"></td>
+                      <td id="c_c_0" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Architecture</td>
+                      <td id="m_c_1" class="al-right"></td>
+                      <td id="v_c_1" class="al-right"></td>
+                      <td id="l_c_1" class="al-right"></td>
+                      <td id="c_c_1" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Art & Abstract</td>
+                      <td id="m_c_2" class="al-right"></td>
+                      <td id="v_c_2" class="al-right"></td>
+                      <td id="l_c_2" class="al-right"></td>
+                      <td id="c_c_2" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Cars & vehicles</td>
+                      <td id="m_c_3" class="al-right"></td>
+                      <td id="v_c_3" class="al-right"></td>
+                      <td id="l_c_3" class="al-right"></td>
+                      <td id="c_c_3" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Characters & Creatures</td>
+                      <td id="m_c_4" class="al-right"></td>
+                      <td id="v_c_4" class="al-right"></td>
+                      <td id="l_c_4" class="al-right"></td>
+                      <td id="c_c_4" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Cultura Heritage & History</td>
+                      <td id="m_c_5" class="al-right"></td>
+                      <td id="v_c_5" class="al-right"></td>
+                      <td id="l_c_5" class="al-right"></td>
+                      <td id="c_c_5" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Electronics & Gadgets</td>
+                      <td id="m_c_6" class="al-right"></td>
+                      <td id="v_c_6" class="al-right"></td>
+                      <td id="l_c_6" class="al-right"></td>
+                      <td id="c_c_6" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Fashion & Style</td>
+                      <td id="m_c_7" class="al-right"></td>
+                      <td id="v_c_7" class="al-right"></td>
+                      <td id="l_c_7" class="al-right"></td>
+                      <td id="c_c_7" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Food & Drink</td>
+                      <td id="m_c_8" class="al-right"></td>
+                      <td id="v_c_8" class="al-right"></td>
+                      <td id="l_c_8" class="al-right"></td>
+                      <td id="c_c_8" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Furniture & Home</td>
+                      <td id="m_c_9" class="al-right"></td>
+                      <td id="v_c_9" class="al-right"></td>
+                      <td id="l_c_9" class="al-right"></td>
+                      <td id="c_c_9" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Music</td>
+                      <td id="m_c_10" class="al-right"></td>
+                      <td id="v_c_10" class="al-right"></td>
+                      <td id="l_c_10" class="al-right"></td>
+                      <td id="c_c_10" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Nature & Plants</td>
+                      <td id="m_c_11" class="al-right"></td>
+                      <td id="v_c_11" class="al-right"></td>
+                      <td id="l_c_11" class="al-right"></td>
+                      <td id="c_c_11" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>News & Politics</td>
+                      <td id="m_c_12" class="al-right"></td>
+                      <td id="v_c_12" class="al-right"></td>
+                      <td id="l_c_12" class="al-right"></td>
+                      <td id="c_c_12" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>People</td>
+                      <td id="m_c_13" class="al-right"></td>
+                      <td id="v_c_13" class="al-right"></td>
+                      <td id="l_c_13" class="al-right"></td>
+                      <td id="c_c_13" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Places & Travel</td>
+                      <td id="m_c_14" class="al-right"></td>
+                      <td id="v_c_14" class="al-right"></td>
+                      <td id="l_c_14" class="al-right"></td>
+                      <td id="c_c_14" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Science & Technology</td>
+                      <td id="m_c_15" class="al-right"></td>
+                      <td id="v_c_15" class="al-right"></td>
+                      <td id="l_c_15" class="al-right"></td>
+                      <td id="c_c_15" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Sports & Fitness</td>
+                      <td id="m_c_16" class="al-right"></td>
+                      <td id="v_c_16" class="al-right"></td>
+                      <td id="l_c_16" class="al-right"></td>
+                      <td id="c_c_16" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Weapons & Military</td>
+                      <td id="m_c_17" class="al-right"></td>
+                      <td id="v_c_17" class="al-right"></td>
+                      <td id="l_c_17" class="al-right"></td>
+                      <td id="c_c_17" class="al-right"></td>
+                    </tr>
+
+                  </table>
+                </div>
+                <div>
+                  <div style="margin-left: 30px;margin-top: 20px">Show info about &nbsp;
+                    Views<input type="radio" name="chS2" style="margin-right: 15px" value="3" checked>
+                    Like<input type="radio" name="chS2" style="margin-right: 15px" value="0">
+                    Comments<input type="radio" name="chS2" style="margin-right: 15px" value="6"></div>
+                  <table class="table1" style=";margin-left: 30px;margin-top: 20px;margin-bottom: 20px;color: #0b0e07">
+                    <tr>
+                      <th>Category</th>
+                      <th >Average</th>
+                      <th >SD</th>
+                      <th >Median</th>
+                    </tr>
+                    <tr>
+                      <td>Animals & Pets</td>
+                      <td id="me_c_0" class="al-right"></td>
+                      <td id="sd_c_0" class="al-right"></td>
+                      <td id="med_c_0" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Architecture</td>
+                      <td id="me_c_1" class="al-right"></td>
+                      <td id="sd_c_1" class="al-right"></td>
+                      <td id="med_c_1" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Art & Abstract</td>
+                      <td id="me_c_2" class="al-right"></td>
+                      <td id="sd_c_2" class="al-right"></td>
+                      <td id="med_c_2" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Cars & vehicles</td>
+                      <td id="me_c_3" class="al-right"></td>
+                      <td id="sd_c_3" class="al-right"></td>
+                      <td id="med_c_3" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Characters & Creatures</td>
+                      <td id="me_c_4" class="al-right"></td>
+                      <td id="sd_c_4" class="al-right"></td>
+                      <td id="med_c_4" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Cultura Heritage & History</td>
+                      <td id="me_c_5" class="al-right"></td>
+                      <td id="sd_c_5" class="al-right"></td>
+                      <td id="med_c_5" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Electronics & Gadgets</td>
+                      <td id="me_c_6" class="al-right"></td>
+                      <td id="sd_c_6" class="al-right"></td>
+                      <td id="med_c_6" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Fashion & Style</td>
+                      <td id="me_c_7" class="al-right"></td>
+                      <td id="sd_c_7" class="al-right"></td>
+                      <td id="med_c_7" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Food & Drink</td>
+                      <td id="me_c_8" class="al-right"></td>
+                      <td id="sd_c_8" class="al-right"></td>
+                      <td id="med_c_8" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Furniture & Home</td>
+                      <td id="me_c_9" class="al-right"></td>
+                      <td id="sd_c_9" class="al-right"></td>
+                      <td id="med_c_9" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Music</td>
+                      <td id="me_c_10" class="al-right"></td>
+                      <td id="sd_c_10" class="al-right"></td>
+                      <td id="med_c_10" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Nature & Plants</td>
+                      <td id="me_c_11" class="al-right"></td>
+                      <td id="sd_c_11" class="al-right"></td>
+                      <td id="med_c_11" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>News & Politics</td>
+                      <td id="me_c_12" class="al-right"></td>
+                      <td id="sd_c_12" class="al-right"></td>
+                      <td id="med_c_12" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>People</td>
+                      <td id="me_c_13" class="al-right"></td>
+                      <td id="sd_c_13" class="al-right"></td>
+                      <td id="med_c_13" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Places & Travel</td>
+                      <td id="me_c_14" class="al-right"></td>
+                      <td id="sd_c_14" class="al-right"></td>
+                      <td id="med_c_14" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Science & Technology</td>
+                      <td id="me_c_15" class="al-right"></td>
+                      <td id="sd_c_15" class="al-right"></td>
+                      <td id="med_c_15" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Sports & Fitness</td>
+                      <td id="me_c_16" class="al-right"></td>
+                      <td id="sd_c_16" class="al-right"></td>
+                      <td id="med_c_16" class="al-right"></td>
+                    </tr>
+                    <tr>
+                      <td>Weapons & Military</td>
+                      <td id="me_c_17" class="al-right"></td>
+                      <td id="sd_c_17" class="al-right"></td>
+                      <td id="med_c_17" class="al-right"></td>
+                    </tr>
+
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Popularity Of Categories
+                      <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px">
+
+                      </span><i class="fas fa-info-circle"></i></i></div></h6>
+                </div>
+                <!-- Card Body -->
+                <div>
+                  <div class="card-body" style="height: 100%;">
+                    <div>Show&nbsp;&nbsp; #Models<input type="radio" name="ch" style="margin-right: 15px" checked="true" value="0">
+                        #Views<input type="radio" name="ch" style="margin-right: 15px" value="1">
+                        #Like<input type="radio" name="ch" style="margin-right: 15px" value="2">
+                        #Comments<input type="radio" name="ch" style="margin-right: 15px" value="3"></div>
+                    <svg id="svg_1" style="width: 100%; height: 100%;" />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Popularity Of Categories
+                      <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
+                           Ordered bar-chart that displays the distribution of models, views, like and comments in each category.
+                          Tha data used are the percentages present in the first table of the 'Summary Info'
+                          <br><br>
+                          How to:
+                          <ul>
+                              <li>Use the for checkbox to choose the quantities to display</li>
+                              <li>Use drop-down list to select the order criteria</li>
+                          </ul>
+
+                      </span><i class="fas fa-info-circle"></i></i></div>
+                  </h6>
+                </div>
+                <!-- Card Body -->
+                <div>
+                  <div class="card-body" style="height: 750px;" >
+                    <p>Choose what to plot:&nbsp;&nbsp;&nbsp; #Models <input type="checkbox" id="STC_M" style="margin-right: 15px"  value="0" checked onclick="up_stacked_elements()">
+                      #Views <input type="checkbox" id="STC_V" style="margin-right: 15px" value="1" checked onclick="up_stacked_elements()">
+                      #Like <input type="checkbox" id="STC_L" style="margin-right: 15px" value="2" checked onclick="up_stacked_elements()">
+                      #Comments <input type="checkbox" id="STC_C" style="margin-right: 15px" value="3" checked onclick="up_stacked_elements()"></p>
+                    <div>Order by <select id="stackOrder">
+                      <option value="0">Number Of Models</option>
+                      <option value="1">Number Of Views</option>
+                      <option value="2">Number Of Likes</option>
+                      <option value="3">Number Of Comments</option>
+                    </select>
+                    </div>
+                    <svg id="svg_4"  style="width: 100%; height: 100%;"/>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow ">
+                <!-- Card Header - Dropdown -->
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                      <h6 class="m-0 font-weight-bold text-primary">Views & Like Distribution
+                          <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
+                          Scatter-plot that visualize the distribution of like and views for each category.
+                          <br>
+                          For instance, for the views distribution, a point (x:100,y:500) state that 100 models have 500 views
+                          <br><br>
+                          How to:<ul>
+                              <li>Use the radio button to switch from views to like distribution and viceversa.</li>
+                              <li>Use the drop-down list to choose the category to view the distribution of</li>
+                              <li>Use the Linear and Logarithm  radio button to change the scale for the X axis</li>
+                              <li>Modify the visualization range for the X axis using the 'from' and 'to' input box </li>
+                          </ul>
+                      </span><i class="fas fa-info-circle"></i></i></div>
+                      </h6>
+                  </div>
+                <!-- Card Body -->
+                <div class="card-body" style="height: 100%; ">
+                  <p>Viduslize Distribution of &nbsp;&nbsp;
+                      Views<input type="radio" name="dist" style="margin-right: 15px" checked="true" value="0">
+                      Likes<input type="radio" name="dist" style="margin-right: 15px"  value="1">
+                  </p>
+                  Category <select id="sel_cat_distr">
+                  <option value="0">Animals & Pets</option>
+                  <option value="1">Architecture</option>
+                  <option value="2">Art & Abstract</option>
+                  <option value="3">Cars & vehicles</option>
+                  <option value="4">Characters & Creatures</option>
+                  <option value="5">Cultural Heritage & History</option>
+                  <option value="6">Electronics & Gadgets</option>
+                  <option value="7">Fashion & Style</option>
+                  <option value="8">Food & Drink</option>
+                  <option value="9">Furniture & Home</option>
+                  <option value="10">Music</option>
+                  <option value="11">Nature & Plants</option>
+                  <option value="12">News & Politics</option>
+                  <option value="13">People</option>
+                  <option value="14">Places & Travel</option>
+                  <option value="15">Science & Technology</option>
+                  <option value="16">Sports & Fitness</option>
+                  <option value="17">Weapons & Military</option>
+                  </select> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  Visualize x-Range from <input type="number" id="from_r" min="175" style="width: 80px"> to <input type="number" id="to_r" style="width: 80px">
+                  <button onclick="up_scatter_range()">UPDATE RANGE</button><button onclick="reset_scatter_range()">reset</button>
+                  <br>
+                  <div style="display: inline;margin-top: 10px; font-weight: bold">Choose the scale:</div>
+                  <input type="radio" name="Scale0" value="0" style="margin-left: 10px" checked>Linear
+                  <input type="radio" name="Scale0" value="1" style="margin-left: 10px">Logarithm(log<sub>10</sub>)
+                  <svg id="svg_2" style="width: 100%; height: 120%;" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow ">
+                <!-- Card Header - Dropdown -->
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                      <h6 class="m-0 font-weight-bold text-primary">Views & Like Distribution
+                          <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
+                          Scatter-plot that visualize the correlation between the number of Views&Likes, Views&Comments and Likes&comment.<br>
+                          For instance, for Views&Comments distribution, a point (x:100,y:5) state that a model with 100 views has 5 comments.
+                          <br><br>
+                          How to:
+                          <ul>
+                              <li>Use the checkbox to choose the category to view the distribution of. Each category has its own color used to distinguish the various dots in the graph </li>
+                              <li>Use the three radio buttons (#Views/#Likes #Views/#Comments #Like/#Comments) to switch from the various distributions </li>
+                              <li>User the Linear and Logarithm radio button to change the scale for the X axis</li>
+                          </ul>
+                              <br>
+                              Click on the dots to see more information and visualize the model
+                      </span><i class="fas fa-info-circle"></i></i></div>
+                      </h6>
+                  </div>
+
+                <!-- Card Body -->
+                <div class="card-body" style="height: 100%; ">
+                  <div style="display: none" id="showSVG3">
+                    <div style="display: inline;margin-top: 5px; font-weight: bold">Choose the categories to plot</div>
+                    <table>
+                      <tr>
+                        <td><input type="checkbox" name="upSp" value="0" ><p style="color: #996633; display: inline;font-weight: bold">Animals & Pets</p></td>
+                        <td><input type="checkbox" name="upSp" value="1"><p style="color: #000066; display: inline;font-weight: bold">Architecture</p></td>
+                        <td><input type="checkbox" name="upSp" value="2"><p style="color: #cc0000; display: inline;font-weight: bold">Art & Abstract</p></td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="upSp" value="3"><p style="color: #cc9900; display: inline;font-weight: bold">Cars & vehicles</p></td>
+                        <td><input type="checkbox" name="upSp" value="4"><p style="color: #009933; display: inline;font-weight: bold">Characters & Creatures</p></td>
+                        <td><input type="checkbox" name="upSp" value="5"><p style="color: #ffcc00; display: inline;font-weight: bold">Cultura Heritage & History</p></td>
+
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="upSp" value="6"><p style="color: #ff66cc; display: inline;font-weight: bold">Electronics & Gadgets</p></td>
+                        <td><input type="checkbox" name="upSp" value="7"><p style="color: #0099ff; display: inline;font-weight: bold">Fashion & Style</p></td>
+                        <td><input type="checkbox" name="upSp" value="8"><p style="color: #669999; display: inline;font-weight: bold">Food & Drink</p></td>
+
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="upSp" value="9"><p style="color: #ffccff; display: inline;font-weight: bold">Furniture & Home</p></td>
+                        <td><input type="checkbox" name="upSp" value="10"><p style="color: #cc6600; display: inline;font-weight: bold">Music</p></td>
+                        <td><input type="checkbox" name="upSp" value="11"><p style="color: #99ff66; display: inline;font-weight: bold">Nature & Plants</p></td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="upSp" value="12"><p style="color: #b3b3ff; display: inline;font-weight: bold">News & Politics</p></td>
+                        <td><input type="checkbox" name="upSp" value="13"><p style="color: #cc00ff; display: inline;font-weight: bold">People</p></td>
+                        <td><input type="checkbox" name="upSp" value="14"><p style="color: #660066; display: inline;font-weight: bold">Places & Travel</p></td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="upSp" value="15"><p style="color: #000033; display: inline;font-weight: bold">Science & Technology</p></td>
+                        <td><input type="checkbox" name="upSp" value="16"><p style="color: #737373; display: inline;font-weight: bold">Sports & Fitness</p></td>
+                        <td><input type="checkbox" name="upSp" value="17"><p style="color: #725bb0; display: inline;font-weight: bold">Weapons & Military</p></td>
+                      </tr>
+                    </table>
+                    <br>
+                    <div style="display: inline;margin-top: 5px; font-weight: bold">Choose what to plot:</div>
+                    <input type="radio" name="plCH" value="0" style="margin-left: 10px" checked>#Views/#Likes
+                    <input type="radio" name="plCH" value="1" style="margin-left: 10px">#Views/#Comments
+                    <input type="radio" name="plCH" value="2" style="margin-left: 10px">#Likes/#Comments
+                    <br>
+                    <div style="display: inline;margin-top: 5px; font-weight: bold">Choose the scale:</div>
+                    <input type="radio" name="Scale" value="0" style="margin-left: 10px" checked>Linear
+                    <input type="radio" name="Scale" value="1" style="margin-left: 10px">Logarithm(log<sub>10</sub>)
+                  <svg id="svg_3" style="width: 100%; height: 100%;" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+      </div>
+
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto" >
+              <span>Developed By Vito Ferrulli</span>
+            </div>
+          </div>
+        </footer>
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+
+  </div>
+
+  <script>
+      var views_distribution ;
+      var likes_distribution ;
+
+      var Nviews_rank = [];
+      var Nlikes_rank = [];
+      var Nmodelss_rank = [];
+      var Ncomments_rank = [];
+
+      var scatter_data = null;
+      var scatter_index = [];
+      var scatter_vidualized = []
+
+      var stacked_data = [];
+      var stacked_data_save = [];
+
+      var summery2 = null;
+
+      function intToString (value) {
+          var suffixes = ["", "K", "M", "B","T"];
+          var suffixNum = Math.floor((""+value).length/3);
+          var shortValue = parseFloat((suffixNum != 0 ? (value / Math.pow(1000,suffixNum)) : value).toPrecision(2));
+          if (shortValue % 1 != 0) {
+              shortValue = shortValue.toFixed(1);
+          }
+          return shortValue+suffixes[suffixNum];
+      }
+
+
+      $( document ).ready(function() {
+          start();
+          multi_scatter_plot("svg_3",[],"","")
+      });
+
+      $( "#sel_cat_distr" ).change(function() {
+          var cat = parseInt($("#sel_cat_distr").val());
+          var type = parseInt($('input[name="dist"]:checked').val());
+          plot_scatterlot(cat,type);
+          $("#from_r").val("");
+          $('#to_r').val("");
+      });
+      $('input[type=radio][name=ch]').change(function() {
+          var r = parseInt(this.value);
+          plot_horizontal_bar_chart(r);
+      });
+      $('input[type=radio][name=dist]').change(function() {
+          var cat = parseInt($("#sel_cat_distr").val());
+          var type = parseInt(this.value);
+          plot_scatterlot(cat,type);
+      });
+
+
+      $('input[type=radio][name=chS2]').change(function() {populateSummary2();});
+      function populateSummary2(){
+          var type = parseInt($('input[name="chS2"]:checked').val());
+
+          var max_md = 0;
+          var max_sd = 0;
+          var max_med = 0;
+          for(var i=0; i<summery2.length; i++){
+              $("#me_c_"+i).html("<div class='tooltip_good'> <span class='top'>"+summery2[i][type]+"</span>"+intToString(parseInt(summery2[i][type]))+"</div>");
+              $("#sd_c_"+i).html("<div class='tooltip_good'> <span class='top'>"+summery2[i][type+1]+"</span>"+intToString(parseInt(summery2[i][type+1]))+"</div>");
+              $("#med_c_"+i).html("<div class='tooltip_good'> <span class='top'>"+summery2[i][type+2]+"</span>"+intToString(parseInt(summery2[i][type+2]))+"</div>");
+
+              if(parseInt(summery2[i][type])>max_md)
+                  max_md = parseInt(summery2[i][type])
+              if(parseInt(summery2[i][type+1])>max_sd)
+                  max_sd = parseInt(summery2[i][type+1])
+              if(parseInt(summery2[i][type+2])>max_med)
+                  max_med = parseInt(summery2[i][type+2])
+          }
+
+          for(var k=0; k<summery2.length; k++){
+
+              var op_md = ((100/max_md)*parseInt(summery2[k][type])).toFixed(2);
+              var op_sd = ((100/max_sd)*parseInt(summery2[k][type+1])).toFixed(2);
+              if(max_med == 0)
+                  var op_med = 50
+              else
+                var op_med = ((100/max_med)*parseInt(summery2[k][type+2])).toFixed(2);
+
+              $("#me_c_"+k).css("background", "rgba(230, 115, 0, "+op_md+"%)")
+              $("#sd_c_"+k).css("background", "rgba(230, 0, 0, "+op_sd+"%)")
+              $("#med_c_"+k).css("background", "rgba(230, 115, 0, "+op_med+"%)")
+
+          }
+      }
+
+
+
+      function up_stacked_elements(){
+          var STC_M = $('#STC_M').is(":checked");
+          var STC_V = $('#STC_V').is(":checked");
+          var STC_L = $('#STC_L').is(":checked");
+          var STC_C = $('#STC_C').is(":checked");
+
+          $("#stackOrder option[value='0']").show();
+          $("#stackOrder option[value='1']").show();
+          $("#stackOrder option[value='2']").show();
+          $("#stackOrder option[value='3']").show();
+
+          var ord = null;
+
+          if(!STC_M)
+              $("#stackOrder option[value='0']").hide();
+          else if(ord==null){
+              ord = 0;
+              $("#stackOrder").val("0");
+          }
+          if(!STC_V)
+              $("#stackOrder option[value='1']").hide();
+          else if(ord==null){
+              ord = 1;
+              $("#stackOrder").val("1");
+          }
+          if(!STC_L)
+              $("#stackOrder option[value='2']").hide();
+          else if(ord==null){
+              ord = 2;
+              $("#stackOrder").val("2");
+          }
+          if(!STC_C)
+              $("#stackOrder option[value='3']").hide();
+          else if(ord==null){
+              ord = 3;
+              $("#stackOrder").val("3");
+          }
+
+
+          $("div.id_100 select").val("-");
+
+          stacked_data = [];
+
+          for (var k=0; k<stacked_data_save.length; k++){
+              stacked_data.push({Category: stacked_data_save[k].Category});
+              if(STC_M)
+                  stacked_data[k].models = stacked_data_save[k].models
+              if(STC_V)
+                  stacked_data[k].views = stacked_data_save[k].views
+              if(STC_L)
+                  stacked_data[k].likes = stacked_data_save[k].likes
+              if(STC_C)
+                  stacked_data[k].comments = stacked_data_save[k].comments
+          }
+
+          plotStackedBarChart(ord);
+
+      }
+      $( "#stackOrder" ).change(function() {
+          var ord = $( "#stackOrder" ).val();
+          plotStackedBarChart(ord);
+      });
+      function plotStackedBarChart(order) {
+          stacked_data.sort(function(a,b) {
+              if(order=="0")
+                return b.models - a.models
+              if(order=="1")
+                  return b.views - a.views
+              if(order=="2")
+                  return b.likes - a.likes
+              if(order=="3")
+                  return b.comments - a.comments
+          });
+
+          $("#svg_4").empty();
+          hor_st_bar_chart("svg_4",stacked_data)
+
+      }
+
+
+
+
+    function plot_horizontal_bar_chart(cat){
+        $("#svg_1").empty();
+        if(cat==0)
+            horizontal_bar_chart("svg_1",Nmodelss_rank)
+        if(cat==1)
+            horizontal_bar_chart("svg_1",Nviews_rank)
+        if(cat==2)
+            horizontal_bar_chart("svg_1",Nlikes_rank)
+        if(cat==3)
+            horizontal_bar_chart("svg_1",Ncomments_rank)
+    }
+
+
+    $('input[type=radio][name=Scale0]').change(function() {up_scatter_range_scale();});
+    function up_scatter_range_scale(){
+        var cat = parseInt($("#sel_cat_distr").val());
+        var type = parseInt($('input[name="dist"]:checked').val());
+        plot_scatterlot(cat,type);
+    }
+
+    function up_scatter_range() {
+        var min = $("#from_r").val()
+        var max = $("#to_r").val()
+
+        var cat = parseInt($("#sel_cat_distr").val());
+        var type = parseInt($('input[name="dist"]:checked').val());
+
+        if(min=="" || max==""){
+            alert("Error: missing values..");
+            return;
+        }
+
+        /*if(parseInt(min)<175 && type==0 ){
+            min = 175;
+            $("#from_r").val("175");
+        }*/
+
+        if(parseInt(min) > parseInt(max)){
+            alert("Error: the first value need to be less then the second value");
+            return;
+        }
+
+
+        plot_scatterlot(cat,type,max, min,);
+    }
+
+    function reset_scatter_range(){
+        var cat = parseInt($("#sel_cat_distr").val());
+        var type = parseInt($('input[name="dist"]:checked').val());
+        $("#from_r").val('')
+        $("#to_r").val('')
+        plot_scatterlot(cat,type);
+    }
+
+
+    function plot_scatterlot(cat,type,max=null,min=null){
+        $("#svg_2").empty();
+        var scale = $("input[name='Scale0']:checked").val()
+
+        if(scale=="1")
+            scale = "log"
+        else
+            scale="linear"
+
+        if(type==0){
+            var temp = views_distribution[cat][1];
+            var data = [];
+            for(var k=0; k<temp.length; k++){
+                data[k] = new Array(2);
+                data[k][0] = temp[k][0];
+                data[k][1] = temp[k][1];
+             }
+            scatter_plot("svg_2",data,"Number Of Views","Occurrences",max,min, scale)
+        }
+        if(type==1){
+            var temp = likes_distribution[cat][1];
+            var data = [];
+            for(var k=0; k<temp.length; k++){
+                data[k] = new Array(2);
+                data[k][0] = temp[k][0];
+                data[k][1] = temp[k][1];
+            }
+            scatter_plot("svg_2",data,"Number Of Likes","Occurrences",max,min,scale)
+        }
+
+
+    }
+
+
+
+
+    $('input[type=checkbox][name=upSp]').change(function() {
+        if(this.checked)
+            scatter_vidualized.push(this.value)
+        else{
+            var index = scatter_vidualized.indexOf(this.value);
+            if (index !== -1) scatter_vidualized.splice(index, 1);
+        }
+        upScatterCategories();
+    });
+    $('input[type=radio][name=plCH]').change(function() {upScatterCategories();});
+    $('input[type=radio][name=Scale]').change(function() {upScatterCategories();});
+     function upScatterCategories(){
+         //view_count - like_count - comment_count - cat - url
+        var data = []
+        var c = 0;
+
+       var type = $("input[name='plCH']:checked").val()
+       var scale = $("input[name='Scale']:checked").val()
+
+       if(scale=="1")
+           scale = "log"
+       else
+           scale="linear"
+
+        var x = 0;
+        var y = 1
+        var xLabel = "Views"
+        var yLabel = "Likes"
+        if(type=="1"){
+            y = 2
+            yLabel = "Comments"
+        }else if(type=="2"){
+            x = 1;
+            y = 2;
+            xLabel = "Likes"
+            yLabel = "Comments"
+        }
+
+        for(var i=0; i<scatter_vidualized.length; i++){
+
+            var start = scatter_index[scatter_vidualized[i]][1];
+            var end = scatter_index[scatter_vidualized[i]][2];
+            var color = scatter_index[scatter_vidualized[i]][3];
+            for(var k=start; k<=end; k++){
+                if(parseInt(scatter_data[k][x])>0 || scale=="linear"){
+                    data[c] = new Array(3)
+                    data[c][0] = scatter_data[k][x];
+                    data[c][1] = scatter_data[k][y];
+                    data[c][2] = color;
+                    data[c][3] = k;
+                    c++;
+                }
+            }
+        }
+         $("#svg_3").empty()
+         multi_scatter_plot("svg_3",data,xLabel,yLabel,null,null,scale)
+     }
+
+
+      function start(){
+          $.ajax({
+              url: "php/get_cat_views.php",
+              type: 'GET',
+              async:false,
+              dataType: "json",
+              success: function(data) {
+                  //[0] category_name - [1] #models - [2] #views  [3] #likes
+                  var total_models = 0;
+                  var total_views = 0;
+                  var total_likes = 0;
+                  for(var i=0; i<data.length; i++){
+
+                      var obj = {
+                          y: data[i][0],
+                          x: data[i][1]
+                      }
+                      Nmodelss_rank.push(obj);
+                      var obj = {
+                          y: data[i][0],
+                          x: data[i][2]
+                      }
+                      Nviews_rank.push(obj);
+                      var obj = {
+                          y: data[i][0],
+                          x: data[i][3]
+                      }
+                      Nlikes_rank.push(obj);
+
+                      total_models += parseInt(data[i][1]);
+                      total_views += parseInt(data[i][2]);
+                      total_likes += parseInt(data[i][3]);
+                  }
+
+                  var max_model_prc = 0;
+                  var max_views_prc = 0;
+                  var max_likes_prc = 0;
+                  for(var i=0; i<data.length; i++){
+                      var model_prc = ((100/total_models)*data[i][1]).toFixed(2);
+                      var views_prc = ((100/total_views)*data[i][2]).toFixed(2);
+                      var likes_prc = ((100/total_likes)*data[i][3]).toFixed(2);
+                      $("#m_c_"+i).append("("+model_prc+"%) <div class='tooltip_good'> <span class='top'>"+data[i][1]+"</span>"+intToString(parseInt(data[i][1]))+"</div>");
+                      $("#v_c_"+i).append("("+views_prc+"%) <div class='tooltip_good'> <span class='top'>"+data[i][2]+"</span>"+intToString(parseInt(data[i][2]))+"</div>");
+                      $("#l_c_"+i).append("("+likes_prc+"%) <div class='tooltip_good'> <span class='top'>"+data[i][3]+"</span>"+intToString(parseInt(data[i][3]))+"</div>");
+
+
+                      if(parseInt(model_prc)>max_model_prc)
+                          max_model_prc = model_prc
+                      if(parseInt(views_prc)>max_views_prc)
+                          max_views_prc = views_prc
+                      if(parseInt(likes_prc)>max_likes_prc)
+                          max_likes_prc = likes_prc
+
+
+                      stacked_data.push({
+                          Category: data[i][0],
+                          models: parseFloat(model_prc),
+                          views: parseFloat(views_prc),
+                          likes: parseFloat(likes_prc),
+                          comments: null
+                      })
+                      stacked_data_save.push({
+                          Category: data[i][0],
+                          models: parseFloat(model_prc),
+                          views: parseFloat(views_prc),
+                          likes: parseFloat(likes_prc),
+                          comments: null
+                      })
+                  }
+
+                  for(var i=0; i<data.length; i++){
+                      var op_model = (100/max_model_prc)*((100/total_models)*data[i][1]).toFixed(2);
+                      var op_views = (100/max_views_prc)*((100/total_views)*data[i][2]).toFixed(2);
+                      var op_likes = (100/max_likes_prc)*((100/total_likes)*data[i][3]).toFixed(2);
+
+                      $("#m_c_"+i).css("background", "rgba(230, 115, 0, "+op_model+"%)")
+                      $("#v_c_"+i).css("background", "rgba(230, 0, 0, "+op_views+"%)")
+                      $("#l_c_"+i).css("background", "rgba(230, 115, 0, "+op_likes+"%)")
+                  }
+                  //$("#m_c_"+i).css("background", "rgba(76, 175, 80, "+model_prc+"%)");
+
+
+
+                  Nmodelss_rank = Nmodelss_rank.sort(function (a,b) {return a.x - b.x})
+                  Nviews_rank = Nviews_rank.sort(function (a,b) {return a.x - b.x})
+                  Nlikes_rank = Nlikes_rank.sort(function (a,b) {return a.x - b.x})
+
+                  plot_horizontal_bar_chart(0);
+
+
+              },
+              error: function(error) {
+                  console.log(error);
+              },
+          });
+
+
+          $.ajax({
+              url: "php/summary_stats.php",
+              type: 'GET',
+              dataType: "json",
+              success: function(data) {
+                  summery2 = data;
+                  populateSummary2();
+
+              },
+              error: function(error) {
+                  console.log(error);
+              },
+          });
+
+
+          $.ajax({
+              url: "php/get_cat_comment_num.php",
+              type: 'GET',
+              dataType: "json",
+              success: function(data) {
+                  //[0] category_name - [[1] #vcomments
+                  var total_comments = 0;
+                  for(var i=0; i<data.length; i++){
+
+                      var obj = {
+                          y: data[i][0],
+                          x: data[i][1]
+                      }
+                      Ncomments_rank.push(obj);
+                      total_comments += parseInt(data[i][1]);
+                  }
+
+                  var max_comments_prc = 0
+                  for(var i=0; i<data.length; i++){
+                      var comments_prc = ((100/total_comments)*data[i][1]).toFixed(2);
+                      $("#c_c_"+i).append("("+comments_prc+"%) <div class='tooltip_good'> <span class='top'>"+data[i][1]+"</span>"+intToString(parseInt(data[i][1]))+"</div>");
+
+                      if(parseInt(comments_prc)>max_comments_prc)
+                          max_comments_prc = comments_prc
+
+                      stacked_data[i].comments = parseFloat(comments_prc);
+                      stacked_data_save[i].comments = parseFloat(comments_prc);
+                  }
+
+                  for(var i=0; i<data.length; i++){
+                      var op_comments = (100/max_comments_prc)*(((100/total_comments)*data[i][1]).toFixed(2));
+                      $("#c_c_"+i).css("background", "rgba(230, 0, 0, "+op_comments+"%)")
+                  }
+
+                  plotStackedBarChart("0");
+                  Ncomments_rank = Ncomments_rank.sort(function (a,b) {return a.x - b.x})
+
+              },
+              error: function(error) {
+                  console.log(error);
+              },
+          });
+
+
+          $.ajax({
+              url: "php/get_distributions.php",
+              type: 'GET',
+              dataType: "json",
+              success: function(data) {
+                  //[0] category_name - [[1] #views - [2] views cardinality]
+                  views_distribution = data[0]
+                  likes_distribution = data[1];
+                  plot_scatterlot(0,0);
+
+
+              },
+              error: function(error) {
+                  console.log(error);
+              },
+          });
+
+
+         $.ajax({
+              url: "php/views_comment_like_dist.php",
+              type: 'GET',
+              dataType: "json",
+              success: function(data) {
+                  //[0] views - [l] likes  - [2] comments  [3] category_name
+                  scatter_data = data;
+                  var colors = ["#996633","#000066","#cc0000","#cc9900","#009933","#ffcc00","#ff66cc","#0099ff",
+                      "#669999","#ffccff","#cc6600","#99ff66","#b3b3ff","#cc00ff","#660066","#000033","#737373","#725bb0"]
+
+                  var c = 0;
+                  var cat = data[0][3]
+                  //scatter_inder = [category,start_index,end_index]
+                  scatter_index[c] = new Array(4)
+                  scatter_index[c][0] = cat;
+                  scatter_index[c][1] = 0
+                  scatter_index[c][3] = colors[0]
+
+                  var i = 0;
+                  while(i<data.length){
+                      if(data[i][3] == cat){
+                          scatter_index[c][2] = i
+                          i++;
+                      }else{
+                          c++;
+                          cat = data[i][3]
+                          scatter_index[c] = new Array(4)
+                          scatter_index[c][0] = cat;
+                          scatter_index[c][1] = i;
+                          scatter_index[c][3] = colors[c];
+
+                      }
+                  }
+
+                  $("#showSVG3").show()
+
+              },
+              error: function(error) {
+                  console.log(error);
+              },
+          });
+      }
+
+
+      function shomodelInfo(k){
+          $("#modal_t").text(scatter_data[k][5]);
+          $("#modal_v").text(scatter_data[k][0]);
+          $("#modal_l").text(scatter_data[k][1]);
+          $("#modal_c").text(scatter_data[k][2]);
+          $("#modal_d").text(scatter_data[k][6]);
+          $("#modal_btn").attr("href", scatter_data[k][4]);
+          //$("#modal_src").attr("src", scatter_data[k][4]);
+          document.getElementById('id01').style.display='block';
+      }
+
+
+  </script>
+
+
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
+</body>
+
+</html>

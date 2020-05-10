@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Sketchfab Analysis">
+  <meta name="author" content="">
+
+  <title>Sketchfab Analysis</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="css/w3_modal.css" rel="stylesheet">
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+
+  <!-- Charts-->
+  <link href="css/charts.css" rel="stylesheet" type="text/css">
+  <script src="js/charts/horizontal_bar_chart.js"></script>
+  <script src="js/charts/scatter_plot.js"></script>
+  <script src="js/charts/horizontal_bar_chart.js"></script>
+  <script src="js/charts/multi_scatter_plot.js"></script>
+
+  <link rel="stylesheet" href="css/styles.css">
+
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="position: fixed;" >
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <img src="img/sk_logo.png">
+        </div>
+        <div class="sidebar-brand-text mx-3">Sketchfab Analysis</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="about.html">
+                <i class="fas fa-fw fa-info-circle"></i>
+                <span>About</span></a>
+        </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="index.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Distributions</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="tags.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Tags Stats</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="comments.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Comments Stats</span></a>
+      </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="face_vertex.html">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Vertices & Faces</span></a>
+        </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column" style="margin-left: 210px">
+
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <div class="w3-container">
+                <div id="id01" class="w3-modal" style="padding-left: 110px" >
+                    <div class="w3-modal-content w3-card-4">
+                        <header class="w3-container w3-teal">
+        <span onclick="document.getElementById('id01').style.display='none'"
+              class="w3-button w3-display-topright">&times;</span>
+                            <h2 id="modal_t"></h2>
+                        </header>
+                        <div class="w3-container" style="margin-top: 10px;margin-bottom: 10px;margin-left: 50px">
+                            <table>
+                                <tr><td>#Views</td><td id="modal_v"></td></tr>
+                                <tr><td>#Likes</td><td id="modal_l"></td></tr>
+                                <tr><td>#Comments </td><td id="modal_c"></td></tr>
+                                <tr><td>#Faces </td><td id="modal_f"></td></tr>
+                                <tr><td>#Vertices </td><td id="modal_ve"></td></tr>
+                                <tr><td>Date</td><td id="modal_d"></td></tr>
+                            </table>
+                            <br>
+                            <a href="" id="modal_btn" class="btn_modal" target="_blank">View Model</a>
+                        </div>
+                        <footer class="w3-container w3-teal">
+                        </footer>
+                    </div>
+                </div>
+            </div>
+
+          <!-- Content Row -->
+
+          <div class="row" style="margin-top: 15px">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Summary info</h6>
+                </div>
+                <!-- Card Body -->
+
+                  <div class="card-body" style="height: 100%;">
+                      <p>Summary info about the number of vertices and faces for each category</p>
+                    <div>
+
+                      <div>Show info about&nbsp;&nbsp; Vertices<input type="radio" name="ch" style="margin-right: 15px" checked="true" value="0">
+                        #Faces<input type="radio" name="ch" style="margin-right: 15px" value="1"></div>
+                      <table class="table1" style=";margin-left: 30px;margin-top: 20px;margin-bottom: 20px;color: #0b0e07">
+                        <tr>
+                          <th>Category</th>
+                          <th >Total</th>
+                          <th >Average</th>
+                          <th >SD</th>
+                          <th >Median</th>
+                        </tr>
+                        <tr>
+                          <td>Animals & Pets</td>
+                          <td id="to_c_0" class="al-right"></td>
+                          <td id="me_c_0" class="al-right"></td>
+                          <td id="sd_c_0" class="al-right"></td>
+                          <td id="med_c_0" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Architecture</td>
+                          <td id="to_c_1" class="al-right"></td>
+                          <td id="me_c_1" class="al-right"></td>
+                          <td id="sd_c_1" class="al-right"></td>
+                          <td id="med_c_1" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Art & Abstract</td>
+                          <td id="to_c_2" class="al-right"></td>
+                          <td id="me_c_2" class="al-right"></td>
+                          <td id="sd_c_2" class="al-right"></td>
+                          <td id="med_c_2" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Cars & vehicles</td>
+                          <td id="to_c_3" class="al-right"></td>
+                          <td id="me_c_3" class="al-right"></td>
+                          <td id="sd_c_3" class="al-right"></td>
+                          <td id="med_c_3" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Characters & Creatures</td>
+                          <td id="to_c_4" class="al-right"></td>
+                          <td id="me_c_4" class="al-right"></td>
+                          <td id="sd_c_4" class="al-right"></td>
+                          <td id="med_c_4" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Cultura Heritage & History</td>
+                          <td id="to_c_5" class="al-right"></td>
+                          <td id="me_c_5" class="al-right"></td>
+                          <td id="sd_c_5" class="al-right"></td>
+                          <td id="med_c_5" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Electronics & Gadgets</td>
+                          <td id="to_c_6" class="al-right"></td>
+                          <td id="me_c_6" class="al-right"></td>
+                          <td id="sd_c_6" class="al-right"></td>
+                          <td id="med_c_6" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Fashion & Style</td>
+                          <td id="to_c_7" class="al-right"></td>
+                          <td id="me_c_7" class="al-right"></td>
+                          <td id="sd_c_7" class="al-right"></td>
+                          <td id="med_c_7" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Food & Drink</td>
+                          <td id="to_c_8" class="al-right"></td>
+                          <td id="me_c_8" class="al-right"></td>
+                          <td id="sd_c_8" class="al-right"></td>
+                          <td id="med_c_8" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Furniture & Home</td>
+                          <td id="to_c_9" class="al-right"></td>
+                          <td id="me_c_9" class="al-right"></td>
+                          <td id="sd_c_9" class="al-right"></td>
+                          <td id="med_c_9" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Music</td>
+                          <td id="to_c_10" class="al-right"></td>
+                          <td id="me_c_10" class="al-right"></td>
+                          <td id="sd_c_10" class="al-right"></td>
+                          <td id="med_c_10" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Nature & Plants</td>
+                          <td id="to_c_11" class="al-right"></td>
+                          <td id="me_c_11" class="al-right"></td>
+                          <td id="sd_c_11" class="al-right"></td>
+                          <td id="med_c_11" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>News & Politics</td>
+                          <td id="to_c_12" class="al-right"></td>
+                          <td id="me_c_12" class="al-right"></td>
+                          <td id="sd_c_12" class="al-right"></td>
+                          <td id="med_c_12" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>People</td>
+                          <td id="to_c_13" class="al-right"></td>
+                          <td id="me_c_13" class="al-right"></td>
+                          <td id="sd_c_13" class="al-right"></td>
+                          <td id="med_c_13" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Places & Travel</td>
+                          <td id="to_c_14" class="al-right"></td>
+                          <td id="me_c_14" class="al-right"></td>
+                          <td id="sd_c_14" class="al-right"></td>
+                          <td id="med_c_14" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Science & Technology</td>
+                          <td id="to_c_15" class="al-right"></td>
+                          <td id="me_c_15" class="al-right"></td>
+                          <td id="sd_c_15" class="al-right"></td>
+                          <td id="med_c_15" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Sports & Fitness</td>
+                          <td id="to_c_16" class="al-right"></td>
+                          <td id="me_c_16" class="al-right"></td>
+                          <td id="sd_c_16" class="al-right"></td>
+                          <td id="med_c_16" class="al-right"></td>
+                        </tr>
+                        <tr>
+                          <td>Weapons & Military</td>
+                          <td id="to_c_17" class="al-right"></td>
+                          <td id="me_c_17" class="al-right"></td>
+                          <td id="sd_c_17" class="al-right"></td>
+                          <td id="med_c_17" class="al-right"></td>
+                        </tr>
+
+                      </table>
+                        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="uniq" name="uniq"> Show unique words for the selected category-->
+                      </div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+
+          <br>
+          <div class="row" style="margin-top: 15px">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Vertices & Faces Distribution
+                      <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
+                          Scatter-plot that visualize the distribution of vertices and faces for each category.
+                          <br>
+                          For instance, for the vertices distribution, a point (x:100,y:500) state that 100 models have 500 vertices
+                          <br><br>
+                          How to:<ul>
+                              <li>Use the radio button to switch from vertices to faces distribution and viceversa.</li>
+                              <li>Use the drop-down list to choose the category to view the distribution of</li>
+                              <li>Use the Linear and Logarithm  radio button to change the scale for the X axis</li>
+                          </ul>
+                      </span><i class="fas fa-info-circle"></i></i></div>
+                  </h6>
+                </div>
+                <!-- Card Body -->
+
+                <div class="card-body" style="height: 100%;">
+                  <p>Viduslize Distribution of &nbsp;&nbsp;
+                    Vertives<input type="radio" name="dist" style="margin-right: 15px" checked="true" value="0">
+                    Faces<input type="radio" name="dist" style="margin-right: 15px"  value="1">
+                  </p>
+                  Category <select id="sel_cat_distr">
+                  <option value="animals-pets">Animals & Pets</option>
+                  <option value="architecture">Architecture</option>
+                  <option value="art-abstract">Art & Abstract</option>
+                  <option value="cars-vehicles">Cars & vehicles</option>
+                  <option value="characters-creatures">Characters & Creatures</option>
+                  <option value="cultural-heritage-history">Cultural Heritage & History</option>
+                  <option value="electronics-gadgets">Electronics & Gadgets</option>
+                  <option value="fashion-style">Fashion & Style</option>
+                  <option value="food-drink">Food & Drink</option>
+                  <option value="furniture-home">Furniture & Home</option>
+                  <option value="music">Music</option>
+                  <option value="nature-plants">Nature & Plants</option>
+                  <option value="news-politics">News & Politics</option>
+                  <option value="people">People</option>
+                  <option value="places-travel">Places & Travel</option>
+                  <option value="science-technology">Science & Technology</option>
+                  <option value="sports-fitness">Sports & Fitness</option>
+                  <option value="weapons-military">Weapons & Military</option>
+                </select> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <br>
+                  <div style="display: inline;margin-top: 10px; font-weight: bold">Choose the scale:</div>
+                  <input type="radio" name="Scale0" value="0" style="margin-left: 10px" checked>Linear
+                  <input type="radio" name="Scale0" value="1" style="margin-left: 10px">Logarithm(log<sub>10</sub>)
+                  <svg id="svg_1" style="width: 100%; height: 120%;" />
+
+              </div>
+            </div>
+          </div>
+          </div>
+
+            <div class="row" style="margin-top: 15px">
+                <!-- Area Chart -->
+                <div class="col-xl-12 col-lg-12">
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Vertices & Faces Distribution
+                                <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
+                                  Scatter-plot that visualize the correlation between the number of Vertices, Faces, Comments, Likes and Views.<br>
+                                  For instance, for Vertices&Faces distribution, a point (x:100,y:5) state that a model with 100 vertices has 5 faces.
+                                  <br><br>
+                                  How to:
+                                  <ul>
+                                      <li>Use the checkbox to choose the category to view the distribution of. Each category has its own color used to distinguish the various dots in the graph </li>
+                                      <li>Use the three radio buttons to switch from the various distributions </li>
+                                      <li>User the Linear and Logarithm radio button to change the scale for the X axis</li>
+                                  </ul>
+                                      <br>
+                                      Click on the dots to see more information and visualize the model
+                                </span><i class="fas fa-info-circle"></i></i>
+                                </div>
+
+                            </h6>
+                        </div>
+                        <!-- Card Body -->
+
+                        <div class="card-body" id="div3" style="height: 100%; display: none">
+                            <table>
+                                <tr>
+                                    <td>Choose what to plot </td>
+                                    <td>#Vertices/#Faces<input type="radio" name="sc2" style="margin-right: 15px" checked="true" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        #Vertices/#Views<input type="radio" name="sc2" style="margin-right: 15px"  value="1">
+                                        #Vertices/#Likes<input type="radio" name="sc2" style="margin-right: 15px"  value="2">
+                                        #Vertices/#Comments<input type="radio" name="sc2" style="margin-right: 15px"  value="3">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        #Faces/#Views<input type="radio" name="sc2" style="margin-right: 15px"  value="4">
+                                        #Faces/#Likes<input type="radio" name="sc2" style="margin-right: 15px"  value="5">
+                                        #Faces/#Comments<input type="radio" name="sc2" style="margin-right: 15px"  value="6">
+                                    </td>
+                                </tr>
+                            </table>
+                            <table>
+                                <tr>
+                                    <td><input type="checkbox" name="upSp" value="0" ><p style="color: #996633; display: inline;font-weight: bold">Animals & Pets</p></td>
+                                    <td><input type="checkbox" name="upSp" value="1"><p style="color: #000066; display: inline;font-weight: bold">Architecture</p></td>
+                                    <td><input type="checkbox" name="upSp" value="2"><p style="color: #cc0000; display: inline;font-weight: bold">Art & Abstract</p></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" name="upSp" value="3"><p style="color: #cc9900; display: inline;font-weight: bold">Cars & vehicles</p></td>
+                                    <td><input type="checkbox" name="upSp" value="4"><p style="color: #009933; display: inline;font-weight: bold">Characters & Creatures</p></td>
+                                    <td><input type="checkbox" name="upSp" value="5"><p style="color: #ffcc00; display: inline;font-weight: bold">Cultura Heritage & History</p></td>
+
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" name="upSp" value="6"><p style="color: #ff66cc; display: inline;font-weight: bold">Electronics & Gadgets</p></td>
+                                    <td><input type="checkbox" name="upSp" value="7"><p style="color: #0099ff; display: inline;font-weight: bold">Fashion & Style</p></td>
+                                    <td><input type="checkbox" name="upSp" value="8"><p style="color: #669999; display: inline;font-weight: bold">Food & Drink</p></td>
+
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" name="upSp" value="9"><p style="color: #ffccff; display: inline;font-weight: bold">Furniture & Home</p></td>
+                                    <td><input type="checkbox" name="upSp" value="10"><p style="color: #cc6600; display: inline;font-weight: bold">Music</p></td>
+                                    <td><input type="checkbox" name="upSp" value="11"><p style="color: #99ff66; display: inline;font-weight: bold">Nature & Plants</p></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" name="upSp" value="12"><p style="color: #b3b3ff; display: inline;font-weight: bold">News & Politics</p></td>
+                                    <td><input type="checkbox" name="upSp" value="13"><p style="color: #cc00ff; display: inline;font-weight: bold">People</p></td>
+                                    <td><input type="checkbox" name="upSp" value="14"><p style="color: #660066; display: inline;font-weight: bold">Places & Travel</p></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" name="upSp" value="15"><p style="color: #000033; display: inline;font-weight: bold">Science & Technology</p></td>
+                                    <td><input type="checkbox" name="upSp" value="16"><p style="color: #737373; display: inline;font-weight: bold">Sports & Fitness</p></td>
+                                    <td><input type="checkbox" name="upSp" value="17"><p style="color: #725bb0; display: inline;font-weight: bold">Weapons & Military</p></td>
+                                </tr>
+                            </table>
+                            <br>
+                            <div style="display: inline;margin-top: 10px; font-weight: bold">Choose the scale:</div>
+                            <input type="radio" name="Scale1" value="0" style="margin-left: 10px" checked>Linear
+                            <input type="radio" name="Scale1" value="1" style="margin-left: 10px">Logarithm(log<sub>10</sub>)
+                            <svg id="svg_2" style="width: 100%; height: 120%;" />
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Developed By Vito Ferrulli</span>
+            </div>
+          </div>
+        </footer>
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+
+  </div>
+  </div>
+
+  <script>
+      var table_data = null;
+      var scatter_data = null;
+
+      var mulyi_scatter_data = null;
+      var multi_scatter_index = [];
+
+      var table_data_prc = null;
+      var total_vertices = 0;
+      var total_faces = 0;
+
+      $( document ).ready(function() {
+          getData();
+          getScatterData("animals-pets",0);
+          getMultiScatte2Data();
+      });
+
+
+
+     function getData() {
+         $.ajax({
+             url: "php/get_vertex&face_info.php",
+             type: 'GET',
+             dataType: "json",
+             success: function(data) {
+                 table_data = data;
+                 for(var i=0;i<data.length;i++){
+                     total_vertices += parseInt(data[i][6]);
+                     total_faces += parseInt(data[i][7]);
+                 }
+                 showTable();
+                 plotScatterDistribution();
+                 plotStackedBC();
+             },
+             error: function(error) {
+                 console.log("Error:"+error);
+             },
+         });
+     }
+
+
+     function plotStackedBC(){
+         console.log(table_data)
+         /*stacked_data = [];
+
+         for (var k=0; k<stacked_data_save.length; k++){
+             stacked_data.push({Category: stacked_data_save[k].Category});
+             if(STC_M)
+                 stacked_data[k].models = stacked_data_save[k].models
+             if(STC_V)
+                 stacked_data[k].views = stacked_data_save[k].views
+             if(STC_L)
+                 stacked_data[k].likes = stacked_data_save[k].likes
+             if(STC_C)
+                 stacked_data[k].comments = stacked_data_save[k].comments
+         }*/
+     }
+
+
+
+
+      $('input[type=radio][name=dist]').change(function() {
+          var cat = $('#sel_cat_distr').val();
+          var type = $('input[type=radio][name=dist]:checked').val();
+          getScatterData(cat,type);
+      });
+      $('#sel_cat_distr').change(function() {
+          var cat = $('#sel_cat_distr').val();
+          var type = $('input[type=radio][name=dist]:checked').val();
+          getScatterData(cat,type);
+      });
+     function getScatterData(cat,type){
+         $.ajax({
+             url: "php/get_vertex&face_distribution.php?cat="+cat+"&type="+type,
+             type: 'GET',
+             dataType: "json",
+             success: function(data) {
+                 scatter_data = data;
+                 plotScatterDistribution();
+             },
+             error: function(error) {
+                 console.log("Error:"+error);
+             },
+         });
+     }
+
+
+
+     $('input[type=radio][name=ch]').change(function() {showTable();});$('input[type=radio][name=ch]').change(function() {showTable();});
+     function showTable() {
+      var type = parseInt($('input[type=radio][name=ch]:checked').val());
+      type = type==1 ? 0 : 3;
+
+         var max_md = 0;
+         var max_sd = 0;
+         var max_med = 0;
+         var max_prc = 0;
+         var total = type==0 ? total_vertices : total_faces;
+         var total_index = type==0 ? 6 : 7;
+         for(var i=0; i<table_data.length; i++){
+             var prc = ((100/total)*table_data[i][total_index]).toFixed(2);
+
+             $("#to_c_"+i).html("("+prc+"%) <div class='tooltip_good'> <span class='top'>(%)"+table_data[i][total_index]+"</span>"+intToString(parseInt(table_data[i][total_index]))+"</div>");
+             $("#me_c_"+i).html("<div class='tooltip_good'> <span class='top'>(%)"+table_data[i][type]+"</span>"+intToString(parseInt(table_data[i][type]))+"</div>");
+             $("#sd_c_"+i).html("<div class='tooltip_good'> <span class='top'>"+table_data[i][type+1]+"</span>"+intToString(parseInt(table_data[i][type+1]))+"</div>");
+             $("#med_c_"+i).html("<div class='tooltip_good'> <span class='top'>"+table_data[i][type+2]+"</span>"+intToString(parseInt(table_data[i][type+2]))+"</div>");
+
+             if(parseInt(table_data[i][type])>max_md)
+                 max_md = parseInt(table_data[i][type])
+             if(parseInt(table_data[i][type+1])>max_sd)
+                 max_sd = parseInt(table_data[i][type+1])
+             if(parseInt(table_data[i][type+2])>max_med)
+                 max_med = parseInt(table_data[i][type+2])
+             if(parseInt(table_data[i][total_index])>max_prc)
+                 max_prc = parseInt(table_data[i][total_index])
+         }
+
+         for(var k=0; k<table_data.length; k++){
+
+             var op_to = ((100/max_prc)*parseInt(table_data[k][total_index])).toFixed(2);
+             var op_md = ((100/max_md)*parseInt(table_data[k][type])).toFixed(2);
+             var op_sd = ((100/max_sd)*parseInt(table_data[k][type+1])).toFixed(2);
+             if(max_med == 0)
+                 var op_med = 50
+             else
+                 var op_med = ((100/max_med)*parseInt(table_data[k][type+2])).toFixed(2);
+
+             $("#to_c_"+k).css("background", "rgba(230, 115, 0, "+op_to+"%)")
+             $("#me_c_"+k).css("background", "rgba(230, 115, 0, "+op_md+"%)")
+             $("#sd_c_"+k).css("background", "rgba(230, 0, 0, "+op_sd+"%)")
+             $("#med_c_"+k).css("background", "rgba(230, 115, 0, "+op_med+"%)")
+
+         }
+     }
+
+
+
+      $('input[type=radio][name=Scale0]').change(function() {plotScatterDistribution();});
+      function plotScatterDistribution(){
+        var scale = $('input[type=radio][name=Scale0]:checked').val()=="0" ? "linear" : "log"
+
+        var data = [];
+        for(var i=0; i<scatter_data.length; i++){
+            data[i] = new Array(2);
+            data[i][0] = parseInt(scatter_data[i][0])
+            data[i][1] = parseInt(scatter_data[i][1])
+        }
+
+        var xlable = "#Vertices"
+        if($('input[type=radio][name=dist]:checked').val() == "1")
+            xlable = "#Faces"
+
+        $("#svg_1") .empty();
+        scatter_plot("svg_1",data,xlable,"#Occurrences",null,null, scale)
+
+      }
+
+
+      function intToString (value) {
+          var suffixes = ["", "K", "M", "B","T"];
+          var suffixNum = Math.floor((""+value).length/3);
+          var shortValue = parseFloat((suffixNum != 0 ? (value / Math.pow(1000,suffixNum)) : value).toPrecision(2));
+          if (shortValue % 1 != 0) {
+              shortValue = shortValue.toFixed(1);
+          }
+          return shortValue+suffixes[suffixNum];
+      }
+
+
+
+
+      function getMultiScatte2Data(){
+          $.ajax({
+              url: "php/get_vertex&face_data.php?",
+              type: 'GET',
+              dataType: "json",
+              success: function(data) {
+                  mulyi_scatter_data = data;
+                  plotMultiScatterDistribution();
+                  $("#div3").show();
+              },
+              error: function(error) {
+                  console.log("Error:"+error);
+              },
+          });
+      }
+
+
+      $('input[type=checkbox][name=upSp]').change(function() {
+          if(this.checked)
+              multi_scatter_index.push(parseInt(this.value))
+          else{
+              var index = multi_scatter_index.indexOf(parseInt(this.value));
+              if (index !== -1) multi_scatter_index.splice(index, 1);
+          }
+          plotMultiScatterDistribution();
+      });
+      $('input[type=radio][name=sc2]').change(function() { plotMultiScatterDistribution()});
+      $('input[type=radio][name=Scale1]').change(function() {plotMultiScatterDistribution()});
+      function plotMultiScatterDistribution(){
+          //[0]url - [1]name - [2]date - [3]-likeCount - [4]viewCount - [5]commentCount - [6]vertexCount - [7]faceCount
+          var type = parseInt($('input[type=radio][name=sc2]:checked').val());
+          var scale = $('input[type=radio][name=Scale1]:checked').val()=="0" ? "linear" : "log"
+
+          var data = []
+          var c = 0;
+
+
+          var x,y,xLabel,yLabel;
+          if(type==0){
+              x=6;
+              y=7;
+              xLabel = "#Vertices"
+              yLabel = "#Faces"
+          }else if(type==1){
+              x=6;
+              y=4;
+              xLabel = "#Vertices"
+              yLabel = "#Views"
+          }else if(type==2){
+              x=6;
+              y=3;
+              xLabel = "#Vertices"
+              yLabel = "#Likes"
+          }else if(type==3){
+              x=6;
+              y=5;
+              xLabel = "#Vertices"
+              yLabel = "#Comments"
+          }else if(type==4){
+              x=7;
+              y=4;
+              xLabel = "#Faces"
+              yLabel = "#Views"
+          }else if(type==5){
+              x=7;
+              y=3;
+              xLabel = "#Faces"
+              yLabel = "#Likes"
+          }else if(type==6){
+              x=7;
+              y=5;
+              xLabel = "#Faces"
+              yLabel = "#Comments"
+          }
+
+          var colors = ["#996633","#000066","#cc0000","#cc9900","#009933","#ffcc00","#ff66cc","#0099ff",
+              "#669999","#ffccff","#cc6600","#99ff66","#b3b3ff","#cc00ff","#660066","#000033","#737373","#725bb0"]
+          for(var i=0; i<multi_scatter_index.length; i++){
+              var index = multi_scatter_index[i];
+              var temp_data = mulyi_scatter_data[index];
+
+
+              for(var k=0; k<temp_data.length; k++){
+                  if(parseInt(temp_data[k][x])>0 || scale=="linear"){
+                      data[c] = new Array(3)
+                      data[c][0] = temp_data[k][x];
+                      data[c][1] = temp_data[k][y];
+                      data[c][2] = colors[index];
+                      data[c][3] = index.toString()+"@"+k.toString()
+                      c++;
+                  }
+              }
+          }
+          $("#svg_2").empty()
+          multi_scatter_plot("svg_2",data,xLabel,yLabel,null,null,scale)
+
+      }
+
+      function shomodelInfo(v){
+          var indexes = v.split("@");
+          var temp = mulyi_scatter_data[parseInt(indexes[0])];
+          var k = parseInt(indexes[1]);
+
+          //[0]url - [1]name - [2]date - [3]-likeCount - [4]viewCount - [5]commentCount - [6]vertexCount - [7]faceCount
+          $("#modal_t").text(temp[k][1]);
+          $("#modal_v").text(temp[k][4]);
+          $("#modal_l").text(temp[k][3]);
+          $("#modal_c").text(temp[k][5]);
+          $("#modal_d").text(temp[k][2]);
+          $("#modal_f").text(temp[k][7]);
+          $("#modal_ve").text(temp[k][6]);
+          $("#modal_btn").attr("href", temp[k][0]);
+          //$("#modal_src").attr("src", scatter_data[k][4]);
+          document.getElementById('id01').style.display='block';
+      }
+
+
+
+  </script>
+
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
+</body>
+
+</html>

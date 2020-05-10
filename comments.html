@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Sketchfab Analysis">
+  <meta name="author" content="">
+
+  <title>Sketchfab Analysis</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+
+  <!-- Charts-->
+  <link href="css/charts.css" rel="stylesheet" type="text/css">
+  <script src="js/charts/horizontal_bar_chart.js"></script>
+  <script src="js/charts/scatter_plot.js"></script>
+  <script src="js/charts/horizontal_bar_chart.js"></script>
+
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="position: fixed;" >
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <img src="img/sk_logo.png">
+        </div>
+        <div class="sidebar-brand-text mx-3">Sketchfab Analysis</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="about.html">
+          <i class="fas fa-fw fa-info-circle"></i>
+          <span>About</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="index.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Distributions</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="tags.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Tags Stats</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="comments.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Comments Stats</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="face_vertex.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Vertices & Faces</span></a>
+      </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column" style="margin-left: 210px">
+
+
+    <!-- Main Content -->
+      <div id="content">
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Content Row -->
+
+          <div class="row" style="margin-top: 15px">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Most Frequent Words In Comments <img src="img/loading.gif" id="loading_1" ></h6>
+                </div>
+                <!-- Card Body -->
+
+                  <div class="card-body" style="height: 100%;">
+                      <p>Bar-chart that shows the top 100 most frequently used words in the model's comments for each category</p>
+                    <div>
+                      Category <select id="sel_cat_tags">
+                      <option value="all">All</option>
+                      <option value="animals-pets">Animals & Pets</option>
+                      <option value="architecture">Architecture</option>
+                      <option value="art-abstract">Art & Abstract</option>
+                      <option value="cars-vehicles">Cars & vehicles</option>
+                      <option value="characters-creatures">Characters & Creatures</option>
+                      <option value="cultural-heritage-history">Cultural Heritage & History</option>
+                      <option value="electronics-gadgets">Electronics & Gadgets</option>
+                      <option value="fashion-style">Fashion & Style</option>
+                      <option value="food-drink">Food & Drink</option>
+                      <option value="furniture-home">Furniture & Home</option>
+                      <option value="music">Music</option>
+                      <option value="nature-plants">Nature & Plants</option>
+                      <option value="news-politics">News & Politics</option>
+                      <option value="people">People</option>
+                      <option value="places-travel">Places & Travel</option>
+                      <option value="science-technology">Science & Technology</option>
+                      <option value="sports-fitness">Sports & Fitness</option>
+                      <option value="weapons-military">Weapons & Military</option>
+                    </select>
+                        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="uniq" name="uniq"> Show unique words for the selected category-->
+                      </div>
+                      <svg id="svg_1" style="width: 100%;" /><br>
+                      <div id="btns" style="display: none;margin-top: 20px"><center>
+                        <button  class="btn2 round" style="font-size: 30px;font-weight: bold;width: 50px;height: 50px;margin-right: 15px" onclick="update_tag_rows(0)"><</button>
+                        <button class="btn2 round" style="font-size: 30px;width: 50px;font-weight: bold;height: 50px;margin-left: 15px" onclick="update_tag_rows(1)">></button>
+                      </center></div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="row" style="margin-top: 15px">
+              <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Meand & Standard Deviation Of Comments Length</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body" style="height: 100%;">
+                  <p>
+                     Calculate length based on #words <input type="radio" name="grouped_type" value="1" checked>  #characters <input type="radio" name="grouped_type" value="2">
+                  </p>
+                  <svg id="svg_2" style="width: 100%;" /><br>
+                    <div id="btns2" style="display: none;margin-top: 20px"><center>
+                        <button  class="btn2 round" style="font-size: 30px;font-weight: bold;width: 50px;height: 50px;margin-right: 15px" onclick="update_groupedBC(0)"><</button>
+                        <button class="btn2 round" style="font-size: 30px;width: 50px;font-weight: bold;height: 50px;margin-left: 15px" onclick="update_groupedBC(1)">></button>
+                    </center></div>
+
+              </div>
+            </div>
+          </div>
+      </div>
+
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Developed By Vito Ferrulli</span>
+            </div>
+          </div>
+        </footer>
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+
+  </div>
+
+  <script>
+      var index_words = 0;
+      var n_showed = 20;
+      var unique = "false";
+      var words_occurrency = [];
+
+      var words_margin = {top: 20, right: 20, bottom: 30, left: 100}
+      
+      var grouped_comments = null;
+      var grouped_index = 0
+      var grouped_type = 0
+
+
+      $('input[type=radio][name=grouped_type]').change(function() {
+          var type = parseInt(this.value);
+          grouped_type = type
+          grouped_index = 0
+          plot_grouped_bar_char()
+      });
+
+      function update_groupedBC(ac) {
+          if(ac==0 && grouped_index>0){
+              grouped_index--
+              plot_grouped_bar_char()
+          }
+          if(ac==1 && grouped_index<2){
+              grouped_index++
+              plot_grouped_bar_char()
+          }
+      }
+
+      function plot_grouped_bar_char() {
+          var data = [];
+          var in_mean = 1
+          var in_std = 2
+          if(grouped_type==2){
+              in_mean = 3
+              in_std = 4
+          }
+
+          var start, stop = 0;
+          if(grouped_index==0) {start=0;stop=6}
+          if(grouped_index==1) {start=6;stop=12}
+          if(grouped_index==2) {start=12;stop=18}
+
+
+            for(var i=start;i<stop;i++){
+                data[i-start] = {
+                    key: grouped_comments[i][0],
+                    values:
+                    [
+                        {grpName:'Mean', grpValue:grouped_comments[i-start][in_mean]},
+                        {grpName:'STD', grpValue:grouped_comments[i-start][in_std]},
+                    ]
+                }
+            }
+
+
+          $("#svg_2").empty()
+          grouped_bar_chart("svg_2",data)
+      }
+
+
+
+      function grouped_bar_chart(svg_id,groupData){
+          var screenWidth = $( document  ).width();
+
+          var margin = {top: 20, right: 20, bottom: 30, left: 40},
+              width = (screenWidth-300) - margin.left - margin.right,
+              height = 600 - margin.top - margin.bottom;
+
+
+
+          var x0  = d3.scaleBand().rangeRound([0, width], .5);
+          var x1  = d3.scaleBand();
+          var y   = d3.scaleLinear().rangeRound([height, 0]);
+
+          var xAxis = d3.axisBottom().scale(x0)
+
+          var yAxis = d3.axisLeft().scale(y);
+
+          const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+          var svg = d3.select("#"+svg_id)
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+          var categoriesNames = groupData.map(function(d) { return d.key; });
+          var rateNames       = groupData[0].values.map(function(d) { return d.grpName; });
+
+          x0.domain(categoriesNames);
+          x1.domain(rateNames).rangeRound([0, x0.bandwidth()]);
+          y.domain([0, d3.max(groupData, function(key) { return d3.max(key.values, function(d) { return d.grpValue; }); })]);
+
+          svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + height + ")")
+              .call(xAxis);
+
+
+          svg.append("g")
+              .attr("class", "y axis")
+              .style('opacity','0')
+              .call(yAxis)
+              .append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 6)
+              .attr("dy", ".71em")
+              .style("text-anchor", "end")
+              .style('font-weight','bold')
+              .text("Value");
+
+          svg.select('.y').transition().duration(500).delay(1300).style('opacity','1');
+
+          var slice = svg.selectAll(".slice")
+              .data(groupData)
+              .enter().append("g")
+              .attr("class", "g")
+              .attr("transform",function(d) { return "translate(" + x0(d.key) + ",0)"; });
+
+          var last = 0
+          slice.selectAll("rect")
+              .data(function(d) { return d.values; })
+              .enter().append("rect")
+              .attr("x", function(d) {
+                  last++;
+                  if(last%2==0)
+                    return x1(d.grpName);
+                  else
+                    return x1(d.grpName)+10;
+              })
+              .attr("width", function(){
+                  if(last%2==0)
+                  return x1.bandwidth()-10
+                  else
+                  return x1.bandwidth()
+              })
+              .style("fill", function(d) { return color(d.grpName) })
+              .attr("y", function(d) { return y(0); })
+              //.attr("onclick", function(d) { return `alert('${y(0)}')`; })
+              .attr("height", function(d) { return height - y(0); })
+              .on("mouseover", handleMouseOver)
+              .on("mouseout", handleMouseOut)
+
+          slice.selectAll("rect")
+              .transition()
+              .delay(function (d) {return Math.random()*1000;})
+              .duration(1000)
+              .attr("y", function(d) { return y(d.grpValue); })
+              .attr("height", function(d) { return height - y(d.grpValue); });
+
+          //Legend
+          var legend = svg.selectAll(".legend")
+              .data(groupData[0].values.map(function(d) { return d.grpName; }).reverse())
+              .enter().append("g")
+              .attr("class", "legend")
+              .attr("transform", function(d,i) { return "translate(0," + i * 20 + ")"; })
+              .style("opacity","0");
+
+          legend.append("rect")
+              .attr("x", width - 18)
+              .attr("width", 18)
+              .attr("height", 18)
+              .style("fill", function(d) { return color(d); });
+
+          legend.append("text")
+              .attr("x", width - 24)
+              .attr("y", 9)
+              .attr("dy", ".35em")
+              .style("text-anchor", "end")
+              .text(function(d) {return d; });
+
+          legend.transition().duration(500).delay(function(d,i){ return 1300 + 100 * i; }).style("opacity","1");
+
+          function handleMouseOver(d, i) {  // Add interactivity
+              d3.select(this).style("fill", d3.rgb(color(d.grpName)).darker(2));
+
+              var xPos = this.x
+              var yPos = this.y
+
+              svg.append("text")
+                  .attr("id", function() { return "t" +d.name+ i })
+                  .attr("x", function() { return (xPos) ; })
+                  .attr("y", function() { return (yPos) ; })
+                  .text(d.name+"("+d.occur+" times)")
+          }
+
+
+          function handleMouseOut(d, i) {
+              d3.select(this).style("fill", color(d.grpName));
+              d3.select("#t"+d.name+ i).remove();
+          }
+
+
+      }
+
+      $( document ).ready(function() {
+          getWords("all");
+          getCommentsLength();
+      });
+
+      $( "#sel_cat_tags" ).change(function() {
+          var cat = $("#sel_cat_tags").val();
+          index_words = 0;
+          getWords(cat);
+
+      });
+      $('#uniq').change(function() {
+          if(this.checked)
+              unique = "true";
+          else
+              unique = "false";
+      });
+
+      function getWords(cat) {
+          $.ajax({
+              url: "php/get_frequent_words.php?cat="+cat+"&unique="+unique,
+              type: 'GET',
+              dataType: "json",
+              success: function(data) {
+                  words_occurrency = data;
+                  update_words_occurrency();
+                  $("#loading_1").hide();
+                  $("#btns").show();
+
+              },
+              error: function(error) {
+                  console.log("Error:"+error);
+                  $("#loading_1").hide();
+              },
+          });
+      }
+
+
+      var lastCat = null;
+      var maxX = null;
+      function update_words_occurrency() {
+          var res = [];
+          var data = words_occurrency.slice(index_words, index_words+n_showed);
+          var start_order = index_words+1;
+
+
+          for(var i=0; i<data.length; i++){
+              var obj = {
+                  y: data[i][0]+" "+(start_order+i)+"°",
+                  x: data[i][1]
+              }
+              res.push(obj)
+          }
+
+          res = res.sort(function (a,b) {
+              return a.x - b.x
+          })
+          console.log(res)
+
+          if(lastCat!=$("#sel_cat_tags").val() || maxX==null){
+              lastCat = $("#sel_cat_tags").val();
+              maxX = 0;
+              for(var i=0; i<data.length; i++){
+                  if(parseInt(data[i][1])>maxX)
+                      maxX = parseInt(data[i][1]);
+              }
+          }
+          $("#svg_1").empty();
+          horizontal_bar_chart("svg_1",res,0,maxX);
+
+      }
+
+      function update_tag_rows(op){
+          if(op==1 && index_words+n_showed<words_occurrency.length){
+              index_words = index_words + n_showed;
+              update_words_occurrency();
+          }
+
+          if(op==1 && words_occurrency.length-n_showed<index_words){
+              index_words = index_words + n_showed;
+              update_words_occurrency();
+          }
+
+          if(op==0 && index_words-n_showed>=0){
+              index_words = index_words - n_showed;
+              update_words_occurrency();
+          }
+      }
+
+
+     function getCommentsLength() {
+         $.ajax({
+             url: "php/get_comments_length.php",
+             type: 'GET',
+             dataType: "json",
+             success: function(data) {
+                 console.log("OOK");
+                 grouped_comments = data
+                 console.log(data);
+                 grouped_type = 1
+                 plot_grouped_bar_char()
+                 $("#btns2").show()
+             },
+             error: function(error) {
+                 console.log("Error:"+error);
+             },
+         });
+     }
+
+
+  </script>
+
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
+</body>
+
+</html>
