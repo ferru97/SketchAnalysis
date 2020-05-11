@@ -45,12 +45,13 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="position: fixed;" >
 
       <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-            <div class="sidebar-brand-icon rotate-n-15">
-                <img src="img/sk_logo.png">
-            </div>
-            <div class="sidebar-brand-text mx-3">Sketchfab Analysis</div>
-        </a>
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <img src="img/sk_logo.png"><br>
+        </div>
+
+      </a>
+      <div style="color: white;margin: 0 auto;font-size: 20px"><strong>SketchAnalysizs</strong></div>
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
@@ -66,11 +67,11 @@
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Distributions</span></a>
       </li>
-        <li class="nav-item active">
-            <a class="nav-link" href="tags.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Tags Stats</span></a>
-        </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="tags.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Tags Stats</span></a>
+      </li>
       <li class="nav-item active">
         <a class="nav-link" href="comments.html">
           <i class="fas fa-fw fa-chart-area"></i>
@@ -402,18 +403,16 @@
           </div>
 
 
+          <!--
           <div class="row">
-            <!-- Area Chart -->
             <div class="col-xl-12 col-lg-12">
               <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">Popularity Of Categories
                       <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px">
 
                       </span><i class="fas fa-info-circle"></i></i></div></h6>
                 </div>
-                <!-- Card Body -->
                 <div>
                   <div class="card-body" style="height: 100%;">
                     <div>Show&nbsp;&nbsp; #Models<input type="radio" name="ch" style="margin-right: 15px" checked="true" value="0">
@@ -424,9 +423,10 @@
                   </div>
                 </div>
 
+
               </div>
             </div>
-          </div>
+          </div> -->
           <br>
           <div class="row">
             <!-- Area Chart -->
@@ -615,6 +615,7 @@
           </div>
         </footer>
     </div>
+      </div>
     <!-- End of Content Wrapper -->
 
   </div>
@@ -930,8 +931,10 @@
             for(var k=start; k<=end; k++){
                 if(parseInt(scatter_data[k][x])>0 || scale=="linear"){
                     data[c] = new Array(3)
-                    data[c][0] = scatter_data[k][x];
-                    data[c][1] = scatter_data[k][y];
+                    //data[c][0] = parseInt(scatter_data[k][x]);
+                    //data[c][1] = parseInt(scatter_data[k][y]);
+                    data[c][0] = parseInt(scatter_data[k][x]);
+                    data[c][1] = parseInt(scatter_data[k][y]);
                     data[c][2] = color;
                     data[c][3] = k;
                     c++;
@@ -939,6 +942,7 @@
             }
         }
          $("#svg_3").empty()
+         console.log(data)
          multi_scatter_plot("svg_3",data,xLabel,yLabel,null,null,scale)
      }
 
@@ -1118,7 +1122,8 @@
 
 
          $.ajax({
-              url: "php/views_comment_like_dist.php",
+              //url: "php/views_comment_like_dist.php",
+              url: "js/data/data_multi_index.txt",
               type: 'GET',
               dataType: "json",
               success: function(data) {
@@ -1137,27 +1142,31 @@
 
                   var i = 0;
                   while(i<data.length){
-                      if(data[i][3] == cat){
-                          scatter_index[c][2] = i
-                          i++;
-                      }else{
-                          c++;
-                          cat = data[i][3]
-                          scatter_index[c] = new Array(4)
-                          scatter_index[c][0] = cat;
-                          scatter_index[c][1] = i;
-                          scatter_index[c][3] = colors[c];
+                      if(data[i][3]!=undefined){
+                          if(data[i][3] == cat){
+                              scatter_index[c][2] = i
+                              i++;
+                          }else{
+                              c++;
+                              cat = data[i][3]
+                              scatter_index[c] = new Array(4)
+                              scatter_index[c][0] = cat;
+                              scatter_index[c][1] = i;
+                              scatter_index[c][3] = colors[c];
 
-                      }
+                          }
+                      }else i++;
+
                   }
 
+                  console.log(scatter_index)
                   $("#showSVG3").show()
 
               },
               error: function(error) {
                   console.log(error);
               },
-          });
+          })
       }
 
 

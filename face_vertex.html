@@ -42,51 +42,51 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="position: fixed;" >
+      <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="position: fixed;" >
 
-      <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <img src="img/sk_logo.png">
-        </div>
-        <div class="sidebar-brand-text mx-3">Sketchfab Analysis</div>
-      </a>
+          <!-- Sidebar - Brand -->
+          <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+              <div class="sidebar-brand-icon rotate-n-15">
+                  <img src="img/sk_logo.png"><br>
+              </div>
 
-      <!-- Divider -->
-      <hr class="sidebar-divider my-0">
+          </a>
+          <div style="color: white;margin: 0 auto;font-size: 20px"><strong>SketchAnalysizs</strong></div>
 
-      <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="about.html">
-                <i class="fas fa-fw fa-info-circle"></i>
-                <span>About</span></a>
-        </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Distributions</span></a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="tags.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Tags Stats</span></a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="comments.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Comments Stats</span></a>
-      </li>
-        <li class="nav-item active">
-            <a class="nav-link" href="face_vertex.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Vertices & Faces</span></a>
-        </li>
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
+          <!-- Divider -->
+          <hr class="sidebar-divider my-0">
 
-      <!-- Sidebar Toggler (Sidebar) -->
+          <!-- Nav Item - Dashboard -->
+          <li class="nav-item active">
+              <a class="nav-link" href="about.html">
+                  <i class="fas fa-fw fa-info-circle"></i>
+                  <span>About</span></a>
+          </li>
+          <li class="nav-item active">
+              <a class="nav-link" href="index.html">
+                  <i class="fas fa-fw fa-chart-area"></i>
+                  <span>Distributions</span></a>
+          </li>
+          <li class="nav-item active">
+              <a class="nav-link" href="tags.html">
+                  <i class="fas fa-fw fa-chart-area"></i>
+                  <span>Tags Stats</span></a>
+          </li>
+          <li class="nav-item active">
+              <a class="nav-link" href="comments.html">
+                  <i class="fas fa-fw fa-chart-area"></i>
+                  <span>Comments Stats</span></a>
+          </li>
+          <li class="nav-item active">
+              <a class="nav-link" href="face_vertex.html">
+                  <i class="fas fa-fw fa-chart-area"></i>
+                  <span>Vertices & Faces</span></a>
+          </li>
+          <!-- Divider -->
+          <hr class="sidebar-divider d-none d-md-block">
 
-    </ul>
+          <!-- Sidebar Toggler (Sidebar) -->
+      </ul>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -451,7 +451,7 @@
     </div>
     <!-- End of Content Wrapper -->
 
-  </div>
+        </div>
 
   </div>
   </div>
@@ -629,7 +629,8 @@
 
       function getMultiScatte2Data(){
           $.ajax({
-              url: "php/get_vertex&face_data.php?",
+              //url: "php/get_vertex&face_data.php?",
+              url: "js/data/data_multi_index_fe.txt",
               type: 'GET',
               dataType: "json",
               success: function(data) {
@@ -642,6 +643,7 @@
               },
           });
       }
+
 
 
       $('input[type=checkbox][name=upSp]').change(function() {

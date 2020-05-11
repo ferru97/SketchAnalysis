@@ -20,7 +20,7 @@ if($conn){
     if($cat != "all"){
         $sql = "SELECT word, count FROM words_dictionary WHERE words_dictionary.id_category='$cat' ORDER BY words_dictionary.count DESC LIMIT 100";
     }else{
-        $sql = "SELECT word, SUM(count) as count FROM words_dictionary GROUP BY word ORDER BY words_dictionary.count DESC LIMIT 100";
+        $sql = "SELECT word, SUM(count) as count_num FROM words_dictionary GROUP BY word ORDER BY count_num DESC LIMIT 100";
     }
 
     $rs = mysqli_query($conn,$sql) or die ("Errore ".mysqli_error($conn));

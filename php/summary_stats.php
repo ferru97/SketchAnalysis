@@ -12,8 +12,8 @@ $conn = $x->get_conn("127.0.0.1:3308","root","","sketchfab_data");
 
 if($conn){
 
-    $sql2 = "SELECT AVG(models.like_count) AS avg_like , (models.like_count) AS std_like, AVG(models.view_count) AS avg_view ,
-     (models.view_count) AS std_view, AVG(models.comment_count) AS avg_comment , (models.comment_count) AS std_comment, 
+    $sql2 = "SELECT AVG(models.like_count) AS avg_like , STDDEV(models.like_count) AS std_like, AVG(models.view_count) AS avg_view ,
+     STDDEV(models.view_count) AS std_view, AVG(models.comment_count) AS avg_comment , STDDEV(models.comment_count) AS std_comment, 
      categories.name AS cat FROM( models INNER JOIN model_categories ON model_categories.id_model=models.uid ) INNER JOIN categories 
      ON categories.id=model_categories.id_category GROUP BY categories.id ORDER BY cat ASC";
 
@@ -23,13 +23,13 @@ if($conn){
         $c = 0;
         while($row = mysqli_fetch_array($rs2)){
             $result[$c][0] = $row["avg_like"];
-            $result[$c][1] = sqrt($row["std_like"]);
+            $result[$c][1] = $row["std_like"];
             $result[$c][2] = "err";
             $result[$c][3] = $row["avg_view"];
-            $result[$c][4] = sqrt($row["std_view"]);
+            $result[$c][4] = $row["std_view"];
             $result[$c][5] = "err";
             $result[$c][6] = $row["avg_comment"];
-            $result[$c][7] = sqrt($row["std_comment"]);
+            $result[$c][7] = $row["std_comment"];
             $result[$c][8] = "err";
             $result[$c][9] = $row["cat"];
             $c++;
