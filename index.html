@@ -4,11 +4,11 @@
 <head>
 
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Sketchfab Analysis">
+  <meta name="description" content="SketchAnalysis is a web application that analyzes the attributes of the 3D models available on sketchfab.com">
   <meta name="author" content="">
 
-  <title>Sketchfab Analysis</title>
+  <title>SketchAnalysis | Distributions</title>
+
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -861,20 +861,28 @@
         if(type==0){
             var temp = views_distribution[cat][1];
             var data = [];
+            var c = 0;
             for(var k=0; k<temp.length; k++){
-                data[k] = new Array(2);
-                data[k][0] = temp[k][0];
-                data[k][1] = temp[k][1];
+                if(parseInt(temp[k][0])>0 || scale=="linear") {
+                    data[c] = new Array(2);
+                    data[c][0] = temp[k][0];
+                    data[c][1] = temp[k][1];
+                    c++;
+                }
              }
             scatter_plot("svg_2",data,"Number Of Views","Occurrences",max,min, scale)
         }
         if(type==1){
             var temp = likes_distribution[cat][1];
             var data = [];
+            var c = 0;
             for(var k=0; k<temp.length; k++){
-                data[k] = new Array(2);
-                data[k][0] = temp[k][0];
-                data[k][1] = temp[k][1];
+                if(parseInt(temp[k][0])>0 || scale=="linear") {
+                    data[c] = new Array(2);
+                    data[c][0] = temp[k][0];
+                    data[c][1] = temp[k][1];
+                    c++;
+                }
             }
             scatter_plot("svg_2",data,"Number Of Likes","Occurrences",max,min,scale)
         }
