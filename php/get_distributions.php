@@ -58,6 +58,7 @@ function get_views_distribution($conn){
 
     }else
         return "Error";
+
 }
 
 

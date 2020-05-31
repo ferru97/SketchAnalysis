@@ -10,6 +10,7 @@
   <title>SketchAnalysis | Distributions</title>
 
 
+
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -17,11 +18,22 @@
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
-  <script src="https://d3js.org/d3.v5.min.js"></script>
-  <!-- Bootstrap core JavaScript-->
+  <script src="https://d3js.org/d3.v4.js"></script>
+
+  <!--<script src="https://d3js.org/d3.v5.min.js"></script>-->
+
   <script src="vendor/jquery/jquery.min.js"></script>
 
    <link rel="stylesheet" href="css/w3_modal.css">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168078438-1"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-168078438-1');
+  </script>
 
 
     <!-- Charts-->
@@ -30,6 +42,8 @@
   <script src="js/charts/multi_scatter_plot.js"></script>
   <script src="js/charts/scatter_plot.js"></script>
   <script src="js/charts/hor_stacked_bar_chart.js"></script>
+  <script src="js/charts/histogram.js"></script>
+  <script src="js/comments.js"></script>
 
   <link rel="stylesheet" href="css/styles.css">
 
@@ -51,17 +65,13 @@
         </div>
 
       </a>
-      <div style="color: white;margin: 0 auto;font-size: 20px"><strong>SketchAnalysizs</strong></div>
+      <div style="color: white;margin: 0 auto;font-size: 20px"><strong>SketchAnalysis</strong></div>
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
-        <a class="nav-link" href="about.html">
-          <i class="fas fa-fw fa-info-circle"></i>
-          <span>About</span></a>
-      </li>
+
       <li class="nav-item active">
         <a class="nav-link" href="index.html">
           <i class="fas fa-fw fa-chart-area"></i>
@@ -82,15 +92,33 @@
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Vertices & Faces</span></a>
       </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" href="about.html">
+          <i class="fas fa-fw fa-info-circle"></i>
+          <span>About</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="comments-review.html">
+          <i class="fas fa-fw fa-info-circle"></i>
+          <span>Comments</span></a>
+      </li>
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
       <!-- Sidebar Toggler (Sidebar) -->
+      <p style="margin-left:20px;color: white;font-weight: bold">Leave a comment!
+      <div style="display: inline; margin-left: 3px">
+        <textarea id="comment"  rows="4" ></textarea>
+        <button onclick="sendComment()">Comment</button>
+      </div></p>
     </ul>
+
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column" style="margin-left: 210px">
+
 
       <!-- Main Content -->
       <div id="content">
@@ -121,6 +149,9 @@
                 </div>
             </div>
 
+          <div class="row" style="margin-top: 15px">
+          <div id="my_dataviz"></div>
+          </div>
           <!-- Content Row -->
           <div class="row" style="margin-top: 15px">
             <!-- Area Chart -->
@@ -130,7 +161,7 @@
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">Summary Info
                       <div class='tooltip_good' style="display: inline;"> <span class='top' style="margin-top: 150px; width: 300px">
-                          Summary info for each category about the number of models, views, likes and comment
+                          Summary info for each category about the number of models, views, likes, and comment
                       </span><i class="fas fa-info-circle"></i></i></div></h6>
                 </div>
                 <!-- Card Body -->
@@ -436,13 +467,13 @@
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">Popularity Of Categories
                       <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
-                           Ordered bar-chart that displays the distribution of models, views, like and comments in each category.
-                          Tha data used are the percentages present in the first table of the 'Summary Info'
+                           Ordered bar-chart that displays the distribution of models, views, likes, and comments in each category.
+                          The data used are the percentages present in the first table of the 'Summary Info'
                           <br><br>
                           How to:
                           <ul>
-                              <li>Use the for checkbox to choose the quantities to display</li>
-                              <li>Use drop-down list to select the order criteria</li>
+                              <li>Use the checkbox to choose the quantities to display</li>
+                              <li>Use the drop-down list to select the order criteria</li>
                           </ul>
 
                       </span><i class="fas fa-info-circle"></i></i></div>
@@ -476,24 +507,22 @@
               <div class="card shadow ">
                 <!-- Card Header - Dropdown -->
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                      <h6 class="m-0 font-weight-bold text-primary">Views & Like Distribution
+                      <h6 class="m-0 font-weight-bold text-primary">Views & Like Histogram
                           <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
-                          Scatter-plot that visualize the distribution of like and views for each category.
-                          <br>
-                          For instance, for the views distribution, a point (x:100,y:500) state that 100 models have 500 views
+                          A histogram that shows the distribution of like and views for each category.
                           <br><br>
                           How to:<ul>
-                              <li>Use the radio button to switch from views to like distribution and viceversa.</li>
+                              <li>Use the radio button to switch from views to like distribution and vice-versa.</li>
                               <li>Use the drop-down list to choose the category to view the distribution of</li>
-                              <li>Use the Linear and Logarithm  radio button to change the scale for the X axis</li>
-                              <li>Modify the visualization range for the X axis using the 'from' and 'to' input box </li>
+                              <li>Modify the number of bins/columns to visualize with the '#bins' input </li>
+                              <li>Modify the visualized domain with the 'Min & Max' input </li>
                           </ul>
                       </span><i class="fas fa-info-circle"></i></i></div>
                       </h6>
                   </div>
                 <!-- Card Body -->
-                <div class="card-body" style="height: 100%; ">
-                  <p>Viduslize Distribution of &nbsp;&nbsp;
+                <div class="card-body" style="height: 800px" >
+                  <p>Viduslizee Distribution of &nbsp;&nbsp;
                       Views<input type="radio" name="dist" style="margin-right: 15px" checked="true" value="0">
                       Likes<input type="radio" name="dist" style="margin-right: 15px"  value="1">
                   </p>
@@ -517,12 +546,22 @@
                   <option value="16">Sports & Fitness</option>
                   <option value="17">Weapons & Military</option>
                   </select> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  Visualize x-Range from <input type="number" id="from_r" min="175" style="width: 80px"> to <input type="number" id="to_r" style="width: 80px">
-                  <button onclick="up_scatter_range()">UPDATE RANGE</button><button onclick="reset_scatter_range()">reset</button>
-                  <br>
-                  <div style="display: inline;margin-top: 10px; font-weight: bold">Choose the scale:</div>
-                  <input type="radio" name="Scale0" value="0" style="margin-left: 10px" checked>Linear
-                  <input type="radio" name="Scale0" value="1" style="margin-left: 10px">Logarithm(log<sub>10</sub>)
+                  <p>
+                    <table>
+                  <tr>
+                    <td style="width: 100px"># bins</td>
+                    <td><input type="number" min="1"  step="10" value="20" id="nBin" style="width: 100px"></td>
+                  </tr>
+                  <tr>
+                    <td>Range</td>
+                    <td><input placeholder="Min" type="number" min="1" id="minH" value="0" style="width: 100px">
+                        <input placeholder="Max" type="number" min="1" id="maxH" value="1000" style="width: 100px">
+                      <button onclick="HistogramPlot()">UPDATE</button>
+                    </td>
+                  </tr>
+                  </table>
+
+                  </p>
                   <svg id="svg_2" style="width: 100%; height: 120%;" />
                 </div>
               </div>
@@ -535,16 +574,16 @@
               <div class="card shadow ">
                 <!-- Card Header - Dropdown -->
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                      <h6 class="m-0 font-weight-bold text-primary">Views & Like Distribution
+                      <h6 class="m-0 font-weight-bold text-primary">Views & Like ScatterPlot
                           <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
-                          Scatter-plot that visualize the correlation between the number of Views&Likes, Views&Comments and Likes&comment.<br>
-                          For instance, for Views&Comments distribution, a point (x:100,y:5) state that a model with 100 views has 5 comments.
+                          Scatter-plot that visualize the correlation between the number of Views&Likes, Views&Comments, and Likes&comment.<br>
+                          For instance, for Views&Comments distribution, a point (x:100,y:5) states that a model with 100 views has 5 comments.
                           <br><br>
                           How to:
                           <ul>
                               <li>Use the checkbox to choose the category to view the distribution of. Each category has its own color used to distinguish the various dots in the graph </li>
                               <li>Use the three radio buttons (#Views/#Likes #Views/#Comments #Like/#Comments) to switch from the various distributions </li>
-                              <li>User the Linear and Logarithm radio button to change the scale for the X axis</li>
+                              <li>Use the Linear and Logarithm radio button to change the scale for the X-axis</li>
                           </ul>
                               <br>
                               Click on the dots to see more information and visualize the model
@@ -598,7 +637,7 @@
                     <br>
                     <div style="display: inline;margin-top: 5px; font-weight: bold">Choose the scale:</div>
                     <input type="radio" name="Scale" value="0" style="margin-left: 10px" checked>Linear
-                    <input type="radio" name="Scale" value="1" style="margin-left: 10px">Logarithm(log<sub>10</sub>)
+                    <input type="radio" name="Scale" value="1" style="margin-left: 10px">Logarithm(10log<sub>10</sub>)
                   <svg id="svg_3" style="width: 100%; height: 100%;" />
                 </div>
               </div>
@@ -656,22 +695,49 @@
           multi_scatter_plot("svg_3",[],"","")
       });
 
-      $( "#sel_cat_distr" ).change(function() {
-          var cat = parseInt($("#sel_cat_distr").val());
-          var type = parseInt($('input[name="dist"]:checked').val());
-          plot_scatterlot(cat,type);
-          $("#from_r").val("");
-          $('#to_r').val("");
-      });
+
       $('input[type=radio][name=ch]').change(function() {
           var r = parseInt(this.value);
           plot_horizontal_bar_chart(r);
       });
-      $('input[type=radio][name=dist]').change(function() {
+
+
+
+
+
+      $( "#sel_cat_distr" ).change(function() {HistogramPlot();});
+      $('input[type=radio][name=dist]').change(function() {HistogramPlot();});
+      function HistogramPlot(){
           var cat = parseInt($("#sel_cat_distr").val());
-          var type = parseInt(this.value);
-          plot_scatterlot(cat,type);
-      });
+          var type = parseInt($('input[name="dist"]:checked').val());
+          var temp;
+          var min = parseInt($("#minH").val())
+          var max = parseInt($("#maxH").val())
+          var nBin = parseInt($("#nBin").val())
+          var xLabel = "Views Bins"
+          if(type == 0){
+              temp = (views_distribution[cat])[1];
+          }
+          else{
+              temp = (likes_distribution[cat])[1];
+              xLabel = "Likes Bins"
+          }
+
+
+          var data = [];
+          for(var i=0; i<temp.length; i++){
+              var element = temp[i];
+              if(parseInt(element[0])>=min && parseInt(element[0])<=max){
+                  for(var k=0; k<parseInt(element[1]); k++){
+                      data.push({value: parseInt(element[0])});
+                  }
+              }
+          }
+
+          $("#svg_2").empty();
+          plotHistogram("svg_2",data,min,max,nBin,"#OCCURRENCES",xLabel)
+
+      }
 
 
       $('input[type=radio][name=chS2]').change(function() {populateSummary2();});
@@ -805,91 +871,6 @@
         if(cat==3)
             horizontal_bar_chart("svg_1",Ncomments_rank)
     }
-
-
-    $('input[type=radio][name=Scale0]').change(function() {up_scatter_range_scale();});
-    function up_scatter_range_scale(){
-        var cat = parseInt($("#sel_cat_distr").val());
-        var type = parseInt($('input[name="dist"]:checked').val());
-        plot_scatterlot(cat,type);
-    }
-
-    function up_scatter_range() {
-        var min = $("#from_r").val()
-        var max = $("#to_r").val()
-
-        var cat = parseInt($("#sel_cat_distr").val());
-        var type = parseInt($('input[name="dist"]:checked').val());
-
-        if(min=="" || max==""){
-            alert("Error: missing values..");
-            return;
-        }
-
-        /*if(parseInt(min)<175 && type==0 ){
-            min = 175;
-            $("#from_r").val("175");
-        }*/
-
-        if(parseInt(min) > parseInt(max)){
-            alert("Error: the first value need to be less then the second value");
-            return;
-        }
-
-
-        plot_scatterlot(cat,type,max, min,);
-    }
-
-    function reset_scatter_range(){
-        var cat = parseInt($("#sel_cat_distr").val());
-        var type = parseInt($('input[name="dist"]:checked').val());
-        $("#from_r").val('')
-        $("#to_r").val('')
-        plot_scatterlot(cat,type);
-    }
-
-
-    function plot_scatterlot(cat,type,max=null,min=null){
-        $("#svg_2").empty();
-        var scale = $("input[name='Scale0']:checked").val()
-
-        if(scale=="1")
-            scale = "log"
-        else
-            scale="linear"
-
-        if(type==0){
-            var temp = views_distribution[cat][1];
-            var data = [];
-            var c = 0;
-            for(var k=0; k<temp.length; k++){
-                if(parseInt(temp[k][0])>0 || scale=="linear") {
-                    data[c] = new Array(2);
-                    data[c][0] = temp[k][0];
-                    data[c][1] = temp[k][1];
-                    c++;
-                }
-             }
-            scatter_plot("svg_2",data,"Number Of Views","Occurrences",max,min, scale)
-        }
-        if(type==1){
-            var temp = likes_distribution[cat][1];
-            var data = [];
-            var c = 0;
-            for(var k=0; k<temp.length; k++){
-                if(parseInt(temp[k][0])>0 || scale=="linear") {
-                    data[c] = new Array(2);
-                    data[c][0] = temp[k][0];
-                    data[c][1] = temp[k][1];
-                    c++;
-                }
-            }
-            scatter_plot("svg_2",data,"Number Of Likes","Occurrences",max,min,scale)
-        }
-
-
-    }
-
 
 
 
@@ -1119,8 +1100,7 @@
                   //[0] category_name - [[1] #views - [2] views cardinality]
                   views_distribution = data[0]
                   likes_distribution = data[1];
-                  plot_scatterlot(0,0);
-
+                  HistogramPlot();
 
               },
               error: function(error) {

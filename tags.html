@@ -22,6 +22,16 @@
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
 
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168078438-1"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-168078438-1');
+  </script>
+
   <!-- Charts-->
   <link href="css/charts.css" rel="stylesheet" type="text/css">
   <script src="js/charts/horizontal_bar_chart.js"></script>
@@ -29,6 +39,7 @@
   <script src="js/charts/tags_scatter_plot.js"></script>
   <script src="js/rainbowvis.js"></script>
   <script src="js/charts/graph.js"></script>
+  <script src="js/comments.js"></script>
 
   <style>
 
@@ -67,17 +78,13 @@
         </div>
 
       </a>
-      <div style="color: white;margin: 0 auto;font-size: 25px"><strong>SketchAnalysizs</strong></div>
+      <div style="color: white;margin: 0 auto;font-size: 20px"><strong>SketchAnalysis</strong></div>
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
-        <a class="nav-link" href="about.html">
-          <i class="fas fa-fw fa-info-circle"></i>
-          <span>About</span></a>
-      </li>
+
       <li class="nav-item active">
         <a class="nav-link" href="index.html">
           <i class="fas fa-fw fa-chart-area"></i>
@@ -98,10 +105,26 @@
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Vertices & Faces</span></a>
       </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" href="about.html">
+          <i class="fas fa-fw fa-info-circle"></i>
+          <span>About</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="comments-review.html">
+          <i class="fas fa-fw fa-info-circle"></i>
+          <span>Comments</span></a>
+      </li>
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
       <!-- Sidebar Toggler (Sidebar) -->
+      <p style="margin-left:20px;color: white;font-weight: bold">Leave a comment!
+      <div style="display: inline; margin-left: 3px">
+        <textarea id="comment"  rows="4" cols="24" ></textarea>
+        <button onclick="sendComment()">Comment</button>
+      </div></p>
     </ul>
     <!-- End of Sidebar -->
 
@@ -127,7 +150,8 @@
                 </div>
                 <!-- Card Body -->
                   <div class="card-body" style="height: 100%;">
-                      <p>Bar-chart that shows the top 100 most frequently used tags for each category</p>
+                      <p>Bar-chart that shows the top 100 most frequently used tags for each category
+                      <br> Click on a bar to see the corresponding tag occurrences on each category</p>
                     <div>
                       Category <select id="sel_cat_tags">
                       <option value="0">All</option>
@@ -171,7 +195,18 @@
               <div class="card shadow ">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Top 100 Tags Popularity</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Top 100 Tags Popularity
+                    <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
+                          Scatter-plot that visualize displays the relationship between #Tags/#Likes, #Tags/#Views, and #Views/#Likes for the top 100 tags (200 for the category "all").
+                          <br>For #Tags/#Likes and #Tags/#Views the number of likes and views are divided by the number of occurrences of the tag.
+                          <br><br>
+                          How to:<ul>
+                              <li>Use the radio button to switch from the different distributions.</li>
+                              <li>Use the drop-down list to choose the category to view the distribution of</li>
+                              <li>Use the Linear and Logarithm  radio button to change the scale for the X-axis</li>
+                          </ul>
+                      </span><i class="fas fa-info-circle"></i></i></div>
+                  </h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body" style="height: 100%; ">
@@ -223,7 +258,7 @@
 
 
                     <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
-                          Given a tag, this interactive star-graph that shows the top 100 tags which are most frequently used in conjunction with the input tag.<br><br>
+                          Given a tag, this interactive star-graph shows the top 100 tags which are most frequently used in conjunction with the input tag.<br><br>
                           Each dot in the graph is a tag where the central one is the input tag.<br>
                           The closer the dots are to the central point, the more frequently the tags indicated by the dots are used together with the input tag
                               </span><i class="fas fa-info-circle"></i></i></div>
@@ -231,7 +266,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body" style="height: 100%; ">
-                  Given a tag, this interactive star-graph that shows the top 100 tags which are most frequently used in conjunction with the input tag.<br>
+                  Given a tag, this interactive star-graph that the top 100 tags which are most frequently used in conjunction with the input tag.<br>
                   Input a tag <input type="text" value="animal" id="tagCoo"> <button onclick="upTagCoo()">Search</button>
                   <svg id="svg_4" style="width: 100%; height: 100%;" />
                 </div>
@@ -343,7 +378,7 @@
                   });
 
                   $("#selectedTag").show();
-                  $("#selectedTag").text("Occurrences of the rag '"+tag+"' in every category")
+                  $("#selectedTag").text("Occurrences of the tag '"+tag+"' on each category")
                   $("#svg_3").empty();
                   horizontal_bar_chart("svg_3",res);
                   $("#loading_1").hide()

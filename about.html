@@ -19,6 +19,16 @@
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168078438-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-168078438-1');
+    </script>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -28,6 +38,7 @@
     <script src="js/charts/horizontal_bar_chart.js"></script>
     <script src="js/charts/scatter_plot.js"></script>
     <script src="js/charts/horizontal_bar_chart.js"></script>
+    <script src="js/comments.js"></script>
 
 
 </head>
@@ -47,17 +58,13 @@
             </div>
 
         </a>
-        <div style="color: white;margin: 0 auto;font-size: 25px"><strong>SketchAnalysizs</strong></div>
+        <div style="color: white;margin: 0 auto;font-size: 20px"><strong>SketchAnalysis</strong></div>
 
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="about.html">
-                <i class="fas fa-fw fa-info-circle"></i>
-                <span>About</span></a>
-        </li>
+
         <li class="nav-item active">
             <a class="nav-link" href="index.html">
                 <i class="fas fa-fw fa-chart-area"></i>
@@ -78,10 +85,26 @@
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Vertices & Faces</span></a>
         </li>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="about.html">
+                <i class="fas fa-fw fa-info-circle"></i>
+                <span>About</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="comments-review.html">
+                <i class="fas fa-fw fa-info-circle"></i>
+                <span>Comments</span></a>
+        </li>
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
         <!-- Sidebar Toggler (Sidebar) -->
+        <p style="margin-left:20px;color: white;font-weight: bold">Leave a comment!
+        <div style="display: inline; margin-left: 3px">
+            <textarea id="comment"  rows="4" cols="24"></textarea>
+            <button onclick="sendComment()">Comment</button>
+        </div></p>
     </ul>
     <!-- End of Sidebar -->
 
@@ -109,20 +132,21 @@
                             <!-- Card Body -->
                             <div class="card-body" style="height: 100%;">
                                 <p>
-                                    This project was developed by <a href="https://www.facebook.com/vito.l.ferrulli" target="_blank">Ferrulli Vito</a>, a master degree student in computer science
+                                    This project was developed by <a href="https://www.facebook.com/vito.l.ferrulli" target="_blank">Ferrulli Vito</a> a master's degree student in computer science
                                     at the University of Pisa. It has been created for the course Scientific and
-                                    Large Data Visualization and was supervised by professors  <a href="http://vcg.isti.cnr.it/~cignoni/" target="_blank">Paolo Cignoni</a>
-                                    ,<a href="http://vcg.isti.cnr.it/~giorgi/" target="_blank">Daniela Giorgi</a> and <a href="" target="_blank">Massimiliano Corsini</a>.
+                                    Large Data Visualization and was supervised by professors  <a href="http://vcg.isti.cnr.it/~cignoni/" target="_blank">Paolo Cignoni</a>,
+                                    <a href="http://vcg.isti.cnr.it/~giorgi/" target="_blank">Daniela Giorgi</a>, and <a href="" target="_blank">Massimiliano Corsini</a>.
                                 </p>
                                 <p>
                                     <strong>SketchAnalysis</strong> is an interactive website that analyzes the attributes of the 3D models available on <a href="https://sketchfab.com/" target="_blank">sketchfab.com</a>
-                                    and shows related graphs.The main attributes of the models taken into consideration for this project are:
+                                    and shows related graphs. The main attributes of the models taken into consideration for this project are:
                                 <ul>
                                     <li>Number of Views</li>
                                     <li>Number of Like</li>
                                     <li>Number of Comments</li>
                                     <li>Number of Vertices of the model</li>
                                     <li>Number of Faces of the model</li>
+                                    <li>Tags</li>
                                 </ul><br>
                                 </p>
                                 <p>
@@ -132,8 +156,8 @@
                                     the models in descending order of views, from 16 million views to 175. In this period we collected information relating to 220K models.
                                 </p>
                                 <p>
-                                    The data relating to the models were stored on an SQL database with the following ER scheme:
-                                    <img src="img/db_er.PNG" style="width: 55%">
+                                    The results were stored on an SQL database with the following ER scheme:<br>
+                                    <img src="img/db_er.PNG" style="width: 800px">
                                 </p>
                                 <br>
                                 <p>

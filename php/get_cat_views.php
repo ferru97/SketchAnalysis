@@ -36,5 +36,4 @@ if($conn){
 }else
     echo "Error";
 
-
 ?>

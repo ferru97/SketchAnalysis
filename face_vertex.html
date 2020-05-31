@@ -10,6 +10,7 @@
     <title>SketchAnalysis | Face&Vertices Analysis</title>
 
 
+
     <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -19,6 +20,16 @@
   <link href="css/w3_modal.css" rel="stylesheet">
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168078438-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-168078438-1');
+    </script>
 
 
   <!-- Bootstrap core JavaScript-->
@@ -30,6 +41,8 @@
   <script src="js/charts/scatter_plot.js"></script>
   <script src="js/charts/horizontal_bar_chart.js"></script>
   <script src="js/charts/multi_scatter_plot.js"></script>
+  <script src="js/charts/histogram.js"></script>
+    <script src="js/comments.js"></script>
 
   <link rel="stylesheet" href="css/styles.css">
 
@@ -51,17 +64,13 @@
               </div>
 
           </a>
-          <div style="color: white;margin: 0 auto;font-size: 20px"><strong>SketchAnalysizs</strong></div>
+          <div style="color: white;margin: 0 auto;font-size: 20px"><strong>SketchAnalysis</strong></div>
 
           <!-- Divider -->
           <hr class="sidebar-divider my-0">
 
           <!-- Nav Item - Dashboard -->
-          <li class="nav-item active">
-              <a class="nav-link" href="about.html">
-                  <i class="fas fa-fw fa-info-circle"></i>
-                  <span>About</span></a>
-          </li>
+
           <li class="nav-item active">
               <a class="nav-link" href="index.html">
                   <i class="fas fa-fw fa-chart-area"></i>
@@ -82,10 +91,26 @@
                   <i class="fas fa-fw fa-chart-area"></i>
                   <span>Vertices & Faces</span></a>
           </li>
+
+          <li class="nav-item active">
+              <a class="nav-link" href="about.html">
+                  <i class="fas fa-fw fa-info-circle"></i>
+                  <span>About</span></a>
+          </li>
+          <li class="nav-item active">
+              <a class="nav-link" href="comments-review.html">
+                  <i class="fas fa-fw fa-info-circle"></i>
+                  <span>Comments</span></a>
+          </li>
           <!-- Divider -->
           <hr class="sidebar-divider d-none d-md-block">
 
           <!-- Sidebar Toggler (Sidebar) -->
+          <p style="margin-left:20px;color: white;font-weight: bold">Leave a comment!
+          <div style="display: inline; margin-left: 3px">
+              <textarea id="comment"  rows="4" ></textarea>
+              <button onclick="sendComment()">Comment</button>
+          </div></p>
       </ul>
     <!-- End of Sidebar -->
 
@@ -294,23 +319,22 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Vertices & Faces Distribution
+                  <h6 class="m-0 font-weight-bold text-primary">Vertices & Faces Histogram
                       <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
-                          Scatter-plot that visualize the distribution of vertices and faces for each category.
-                          <br>
-                          For instance, for the vertices distribution, a point (x:100,y:500) state that 100 models have 500 vertices
-                          <br><br>
-                          How to:<ul>
-                              <li>Use the radio button to switch from vertices to faces distribution and viceversa.</li>
-                              <li>Use the drop-down list to choose the category to view the distribution of</li>
-                              <li>Use the Linear and Logarithm  radio button to change the scale for the X axis</li>
-                          </ul>
+                          Histogram that shows the distribution of vertices and faces for each category.
+                                  <br><br>
+                                  How to:<ul>
+                                      <li>Use the radio button to switch from face to vertices distribution and vice-versa.</li>
+                                      <li>Use the drop-down list to choose the category to view the distribution of</li>
+                                      <li>Modify the number of bins/columns to visualize with the '#bins' input </li>
+                                      <li>Modify the visualized domain with the 'Min & Max' input </li>
+                                  </ul>
                       </span><i class="fas fa-info-circle"></i></i></div>
                   </h6>
                 </div>
                 <!-- Card Body -->
 
-                <div class="card-body" style="height: 100%;">
+                <div class="card-body" style="height: 770px;">
                   <p>Viduslize Distribution of &nbsp;&nbsp;
                     Vertives<input type="radio" name="dist" style="margin-right: 15px" checked="true" value="0">
                     Faces<input type="radio" name="dist" style="margin-right: 15px"  value="1">
@@ -336,9 +360,21 @@
                   <option value="weapons-military">Weapons & Military</option>
                 </select> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <br>
-                  <div style="display: inline;margin-top: 10px; font-weight: bold">Choose the scale:</div>
-                  <input type="radio" name="Scale0" value="0" style="margin-left: 10px" checked>Linear
-                  <input type="radio" name="Scale0" value="1" style="margin-left: 10px">Logarithm(log<sub>10</sub>)
+
+                    <table>
+                        <tr>
+                            <td style="width: 100px"># bins</td>
+                            <td><input type="number" min="1"  step="10" value="20" id="nBin" style="width: 100px"></td>
+                        </tr>
+                        <tr>
+                            <td>Range</td>
+                            <td><input placeholder="Min" type="number" min="1" id="minH" value="0" style="width: 100px">
+                                <input placeholder="Max" type="number" min="1" id="maxH" value="1000" style="width: 100px">
+                                <button onclick="HistogramPlot()">UPDATE</button>
+                            </td>
+                        </tr>
+                    </table>
+
                   <svg id="svg_1" style="width: 100%; height: 120%;" />
 
               </div>
@@ -352,16 +388,16 @@
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Vertices & Faces Distribution
+                            <h6 class="m-0 font-weight-bold text-primary">Vertices & Faces ScatterPlot
                                 <div class='tooltip_good' style="display: inline;"> <span class='top' style="width: 500px;">
-                                  Scatter-plot that visualize the correlation between the number of Vertices, Faces, Comments, Likes and Views.<br>
-                                  For instance, for Vertices&Faces distribution, a point (x:100,y:5) state that a model with 100 vertices has 5 faces.
+                                  Scatter-plot that visualize the correlation between the number of Vertices, Faces, Comments, Likes, and Views.<br>
+                                  For instance, for Vertices&Faces distribution, a point (x:100,y:5) states that a model with 100 vertices has 5 faces.
                                   <br><br>
                                   How to:
                                   <ul>
                                       <li>Use the checkbox to choose the category to view the distribution of. Each category has its own color used to distinguish the various dots in the graph </li>
                                       <li>Use the three radio buttons to switch from the various distributions </li>
-                                      <li>User the Linear and Logarithm radio button to change the scale for the X axis</li>
+                                      <li>Use the Linear and Logarithm radio button to change the scale for the X-axis</li>
                                   </ul>
                                       <br>
                                       Click on the dots to see more information and visualize the model
@@ -487,7 +523,6 @@
                      total_faces += parseInt(data[i][7]);
                  }
                  showTable();
-                 plotScatterDistribution();
                  plotStackedBC();
              },
              error: function(error) {
@@ -534,7 +569,7 @@
              dataType: "json",
              success: function(data) {
                  scatter_data = data;
-                 plotScatterDistribution();
+                 HistogramPlot();
              },
              error: function(error) {
                  console.log("Error:"+error);
@@ -593,23 +628,28 @@
 
 
 
-      $('input[type=radio][name=Scale0]').change(function() {plotScatterDistribution();});
-      function plotScatterDistribution(){
-        var scale = $('input[type=radio][name=Scale0]:checked').val()=="0" ? "linear" : "log"
+      function HistogramPlot(){
+          var min = parseInt($("#minH").val())
+          var max = parseInt($("#maxH").val())
+          var nBin = parseInt($("#nBin").val())
 
         var data = [];
         for(var i=0; i<scatter_data.length; i++){
-            data[i] = new Array(2);
-            data[i][0] = parseInt(scatter_data[i][0])
-            data[i][1] = parseInt(scatter_data[i][1])
+            var element = scatter_data[i];
+            if(parseInt(element[0])>=min && parseInt(element[0])<=max){
+                for(var k=0; k<parseInt(element[1]); k++){
+                    data.push({value: parseInt(element[0])});
+                }
+            }
         }
 
-        var xlable = "#Vertices"
+        var xlable = "Vertices Bins"
         if($('input[type=radio][name=dist]:checked').val() == "1")
-            xlable = "#Faces"
+            xlable = "Faces Bins"
 
+          console.log(data)
         $("#svg_1") .empty();
-        scatter_plot("svg_1",data,xlable,"#Occurrences",null,null, scale)
+         plotHistogram("svg_1",data,min,max,nBin,"#OCCURRENCES",xlable)
 
       }
 
